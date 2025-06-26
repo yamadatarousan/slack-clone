@@ -7,6 +7,14 @@ interface MessageListProps {
 }
 
 export default function MessageList({ messages, currentUser }: MessageListProps) {
+  console.log('MessageList received messages:', messages);
+  console.log('Messages with sender info:', messages.map(m => ({
+    id: m.id,
+    content: m.content.substring(0, 20) + '...',
+    hasSender: !!m.sender,
+    sender: m.sender
+  })));
+  
   if (messages.length === 0) {
     return (
       <div className="h-full flex items-center justify-center text-gray-500">

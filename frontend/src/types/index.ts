@@ -30,10 +30,9 @@ export interface Message {
   content: string;
   channel_id: number;
   user_id: number;
+  message_type: string;
+  thread_id?: number | null;
   edited: boolean;
-  deleted: boolean;
-  message_type?: string;
-  thread_id?: number;
   created_at: string;
   updated_at: string;
   sender?: User;
@@ -43,6 +42,7 @@ export interface Message {
   sender_id?: number;
   is_edited?: boolean;
   is_deleted?: boolean;
+  deleted?: boolean;
   parent_message_id?: number;
 }
 

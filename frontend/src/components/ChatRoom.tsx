@@ -60,6 +60,7 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
     try {
       setLoading(true);
       const messagesData = await apiService.getChannelMessages(channel.id);
+      console.log('Loaded messages:', messagesData);
       setMessages(messagesData);
     } catch (error) {
       console.error('Failed to load messages:', error);
