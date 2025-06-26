@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slack Clone WebSocket Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .messages { 
+            height: 400px; 
+            border: 1px solid #ccc; 
+            overflow-y: scroll; 
+            padding: 10px; 
+            margin: 10px 0; 
+            background: #f9f9f9;
+        }
+        .message { 
+            margin: 5px 0; 
+            padding: 5px; 
+            border-radius: 3px; 
+        }
+        .own-message { background: #e3f2fd; }
+        .other-message { background: #fff; }
+        .system-message { background: #f0f0f0; font-style: italic; }
+        .input-container { 
+            display: flex; 
+            gap: 10px; 
+            margin: 10px 0; 
+        }
+        input, button { 
+            padding: 8px; 
+            font-size: 14px; 
+        }
+        #messageInput { 
+            flex: 1; 
+        }
+        .status { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 4px; 
+            font-weight: bold;
+        }
+        .connected { background: #d4edda; color: #155724; }
+        .disconnected { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Slack Clone WebSocket Test</h1>
+        
+        <div class="input-container">
+            <input type="text" id="userIdInput" placeholder="User ID (e.g., user1)" value="user1">
+            <button onclick="connect()">接続</button>
+            <button onclick="disconnect()">切断</button>
+        </div>
+        
+        <div id="status" class="status disconnected">未接続</div>
+        
+        <div class="input-container">
+            <input type="text" id="channelInput" placeholder="Channel (e.g., general)" value="general">
+            <input type="text" id="messageInput" placeholder="メッセージを入力..." disabled>
+            <button onclick="sendMessage()" disabled id="sendBtn">送信</button>
+        </div>
+        
+        <div id="messages" class="messages"></div>
+        
+        <h3>📊 機能テスト</h3>
+        <button onclick="sendTyping(true)">タイピング開始</button>
+        <button onclick="sendTyping(false)">タイピング終了</button>
+    </div>
+
+    <script>
+        let websocket = null;
+        let currentUserId = null;
+
+        function connect() {
+            const userId = document.getElementById('userIdInput').value.trim();
+            if (!userId) {
+                alert('User IDを入力してください');
+                return;
+            }
+
+            if (websocket) {
+                websocket.close();
+            }
+
+            currentUserId = userId;
+            websocket = new WebSocket(`ws://localhost:8000/ws/${userId}`);
+
+            websocket.onopen = function(event) {
+                updateStatus('接続中', 'connected');
+                document.getElementById('messageInput').disabled = false;
+                document.getElementById('sendBtn').disabled = false;
+                addMessage('システム: WebSocketに接続しました', 'system-message');
+            };
+
+            websocket.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                handleMessage(data);
+            };
+
+            websocket.onclose = function(event) {
+                updateStatus('切断', 'disconnected');
+                document.getElementById('messageInput').disabled = true;
+                document.getElementById('sendBtn').disabled = true;
+                addMessage('システム: WebSocketから切断されました', 'system-message');
+            };
+
+            websocket.onerror = function(error) {
+                console.error('WebSocket error:', error);
+                addMessage('システム: エラーが発生しました', 'system-message');
+            };
+        }
+
+        function disconnect() {
+            if (websocket) {
+                websocket.close();
+                websocket = null;
+            }
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const channelInput = document.getElementById('channelInput');
+            const message = messageInput.value.trim();
+            
+            if (!message || !websocket) return;
+
+            const messageData = {
+                type: 'message',
+                content: message,
+                channel_id: channelInput.value.trim() || 'general'
+            };
+
+            websocket.send(JSON.stringify(messageData));
+            messageInput.value = '';
+        }
+
+        function sendTyping(isTyping) {
+            if (!websocket) return;
+
+            const typingData = {
+                type: 'typing',
+                channel_id: document.getElementById('channelInput').value.trim() || 'general',
+                is_typing: isTyping
+            };
+
+            websocket.send(JSON.stringify(typingData));
+        }
+
+        function handleMessage(data) {
+            switch(data.type) {
+                case 'message':
+                    const isOwnMessage = data.user_id === currentUserId;
+                    const messageClass = isOwnMessage ? 'own-message' : 'other-message';
+                    const prefix = isOwnMessage ? 'あなた' : data.user_id;
+                    addMessage(`${prefix} [#${data.channel_id}]: ${data.content}`, messageClass);
+                    break;
+                
+                case 'user_connected':
+                    if (data.user_id !== currentUserId) {
+                        addMessage(`${data.user_id} が参加しました`, 'system-message');
+                    }
+                    break;
+                
+                case 'user_disconnected':
+                    if (data.user_id !== currentUserId) {
+                        addMessage(`${data.user_id} が退出しました`, 'system-message');
+                    }
+                    break;
+                
+                case 'typing':
+                    if (data.user_id !== currentUserId) {
+                        const action = data.is_typing ? 'タイピング中...' : 'タイピング停止';
+                        addMessage(`${data.user_id} が ${action}`, 'system-message');
+                    }
+                    break;
+                
+                default:
+                    console.log('Unknown message type:', data);
+            }
+        }
+
+        function addMessage(text, className = 'message') {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${className}`;
+            messageDiv.textContent = `[${new Date().toLocaleTimeString()}] ${text}`;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function updateStatus(text, className) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = `ステータス: ${text}`;
+            statusDiv.className = `status ${className}`;
+        }
+
+        // Enter キーでメッセージ送信
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // ページロード時の初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            addMessage('WebSocketテストページを開始しました。User IDを入力して接続してください。', 'system-message');
+        });
+    </script>
+</body>
+</html>

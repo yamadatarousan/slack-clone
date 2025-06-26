@@ -1,0 +1,231 @@
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from typing import List
+
+from app.database.base import get_db
+from app.database.models import Message, Channel, User, channel_members, Reaction
+from app.models.message import MessageCreate, MessageResponse, MessageUpdate, ReactionCreate
+from app.routers.auth import get_current_user
+
+router = APIRouter()
+
+
+@router.post("/", response_model=MessageResponse)
+def create_message(
+    message: MessageCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Check if channel exists and user has access
+    channel = db.query(Channel).filter(Channel.id == message.channel_id).first()
+    if not channel:
+        raise HTTPException(status_code=404, detail="Channel not found")
+    
+    # Check if user is a member of the channel
+    member = db.query(channel_members).filter(
+        channel_members.c.user_id == current_user.id,
+        channel_members.c.channel_id == message.channel_id
+    ).first()
+    
+    if not member and channel.is_private:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Create message
+    db_message = Message(
+        content=message.content,
+        message_type=message.message_type or "text",
+        channel_id=message.channel_id,
+        user_id=current_user.id,
+        thread_id=message.parent_message_id
+    )
+    db.add(db_message)
+    db.commit()
+    db.refresh(db_message)
+    
+    return db_message
+
+
+@router.get("/channel/{channel_id}", response_model=List[MessageResponse])
+def get_channel_messages(
+    channel_id: int,
+    skip: int = 0,
+    limit: int = 50,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Check if channel exists and user has access
+    channel = db.query(Channel).filter(Channel.id == channel_id).first()
+    if not channel:
+        raise HTTPException(status_code=404, detail="Channel not found")
+    
+    # Check if user is a member of the channel
+    member = db.query(channel_members).filter(
+        channel_members.c.user_id == current_user.id,
+        channel_members.c.channel_id == channel_id
+    ).first()
+    
+    if not member and channel.is_private:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Get messages
+    messages = db.query(Message).filter(
+        Message.channel_id == channel_id,
+        Message.deleted == False
+    ).order_by(Message.created_at.desc()).offset(skip).limit(limit).all()
+    
+    return messages[::-1]  # Return in chronological order
+
+
+@router.get("/{message_id}", response_model=MessageResponse)
+def get_message(
+    message_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    message = db.query(Message).filter(Message.id == message_id).first()
+    if not message:
+        raise HTTPException(status_code=404, detail="Message not found")
+    
+    # Check if user has access to the channel
+    channel = db.query(Channel).filter(Channel.id == message.channel_id).first()
+    member = db.query(channel_members).filter(
+        channel_members.c.user_id == current_user.id,
+        channel_members.c.channel_id == message.channel_id
+    ).first()
+    
+    if not member and channel.is_private:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    return message
+
+
+@router.put("/{message_id}", response_model=MessageResponse)
+def update_message(
+    message_id: int,
+    message_update: MessageUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    message = db.query(Message).filter(Message.id == message_id).first()
+    if not message:
+        raise HTTPException(status_code=404, detail="Message not found")
+    
+    # Check if user is the sender
+    if message.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Can only edit your own messages")
+    
+    # Update message
+    if message_update.content is not None:
+        message.content = message_update.content
+        message.edited = True
+    
+    db.commit()
+    db.refresh(message)
+    return message
+
+
+@router.delete("/{message_id}")
+def delete_message(
+    message_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    message = db.query(Message).filter(Message.id == message_id).first()
+    if not message:
+        raise HTTPException(status_code=404, detail="Message not found")
+    
+    # Check if user is the sender or channel admin
+    is_sender = message.user_id == current_user.id
+    is_admin = db.query(channel_members).filter(
+        channel_members.c.user_id == current_user.id,
+        channel_members.c.channel_id == message.channel_id,
+        channel_members.c.role.in_(['admin', 'owner'])
+    ).first()
+    
+    if not is_sender and not is_admin:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Soft delete
+    message.deleted = True
+    message.content = "[Deleted message]"
+    db.commit()
+    
+    return {"message": "Message deleted successfully"}
+
+
+@router.post("/{message_id}/reactions", response_model=dict)
+def add_reaction(
+    message_id: int,
+    reaction: ReactionCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Check if message exists and user has access
+    message = db.query(Message).filter(Message.id == message_id).first()
+    if not message:
+        raise HTTPException(status_code=404, detail="Message not found")
+    
+    # Check if user has access to the channel
+    channel = db.query(Channel).filter(Channel.id == message.channel_id).first()
+    member = db.query(channel_members).filter(
+        channel_members.c.user_id == current_user.id,
+        channel_members.c.channel_id == message.channel_id
+    ).first()
+    
+    if not member and channel.is_private:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Check if reaction already exists
+    existing_reaction = db.query(Reaction).filter(
+        Reaction.message_id == message_id,
+        Reaction.user_id == current_user.id,
+        Reaction.emoji == reaction.emoji
+    ).first()
+    
+    if existing_reaction:
+        # Remove reaction (toggle)
+        db.delete(existing_reaction)
+        db.commit()
+        return {"message": "Reaction removed"}
+    else:
+        # Add reaction
+        db_reaction = Reaction(
+            emoji=reaction.emoji,
+            message_id=message_id,
+            user_id=current_user.id
+        )
+        db.add(db_reaction)
+        db.commit()
+        return {"message": "Reaction added"}
+
+
+@router.get("/{message_id}/thread", response_model=List[MessageResponse])
+def get_message_thread(
+    message_id: int,
+    skip: int = 0,
+    limit: int = 50,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Check if parent message exists and user has access
+    parent_message = db.query(Message).filter(Message.id == message_id).first()
+    if not parent_message:
+        raise HTTPException(status_code=404, detail="Message not found")
+    
+    # Check if user has access to the channel
+    channel = db.query(Channel).filter(Channel.id == parent_message.channel_id).first()
+    member = db.query(channel_members).filter(
+        channel_members.c.user_id == current_user.id,
+        channel_members.c.channel_id == parent_message.channel_id
+    ).first()
+    
+    if not member and channel.is_private:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Get thread messages
+    thread_messages = db.query(Message).filter(
+        Message.thread_id == message_id,
+        Message.edited == False
+    ).order_by(Message.created_at.asc()).offset(skip).limit(limit).all()
+    
+    return thread_messages

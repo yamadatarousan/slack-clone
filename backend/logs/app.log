@@ -1,0 +1,726 @@
+2025-06-26 23:51:16,134 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-26 23:51:16,135 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:16,137 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-26 23:51:16,137 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:16,138 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-26 23:51:16,138 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:16,139 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:51:16,140 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-26 23:51:16,140 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:16,152 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-26 23:51:16,153 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:16,155 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-26 23:51:16,156 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:16,158 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-26 23:51:16,159 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:16,161 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-26 23:51:16,161 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:16,165 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-26 23:51:17,780 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-26 23:51:17,781 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:17,782 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-26 23:51:17,782 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:17,783 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-26 23:51:17,783 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:17,784 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:51:17,784 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-26 23:51:17,784 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:17,788 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-26 23:51:17,789 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:17,791 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-26 23:51:17,791 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:17,794 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-26 23:51:17,795 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:17,798 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-26 23:51:17,798 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:51:17,801 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-26 23:51:17,939 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:53:29,257 - app.routers.auth - INFO - Registration attempt for user: testuser3, email: test3@example.com
+2025-06-26 23:53:29,307 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:53:29,311 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password, users.display_name AS users_display_name, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s
+2025-06-26 23:53:29,313 - sqlalchemy.engine.Engine - INFO - [generated in 0.00032s] {'email_1': 'test3@example.com', 'param_1': 1}
+2025-06-26 23:53:29,314 - app.routers.auth - ERROR - Unexpected error during registration for testuser3: (pymysql.err.OperationalError) (1054, "Unknown column 'users.hashed_password' in 'field list'")
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password, users.display_name AS users_display_name, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'email_1': 'test3@example.com', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Traceback (most recent call last):
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/cursors.py", line 153, in execute
+    result = self._query(query)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/cursors.py", line 322, in _query
+    conn.query(q)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 558, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 822, in _read_query_result
+    result.read()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 1200, in read
+    first_packet = self.connection._read_packet()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 772, in _read_packet
+    packet.raise_for_error()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/protocol.py", line 221, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/err.py", line 143, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'users.hashed_password' in 'field list'")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/user/Development/slack-clone/backend/app/routers/auth.py", line 84, in register_user
+    db_user = get_user_by_email(db, email=user.email)
+  File "/Users/user/Development/slack-clone/backend/app/routers/auth.py", line 31, in get_user_by_email
+    return db.query(User).filter(User.email == email).first()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2748, in first
+    return self.limit(1)._iter().first()  # type: ignore
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2847, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2308, in execute
+    return self._execute_internal(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2190, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/orm/context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1639, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2343, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/cursors.py", line 153, in execute
+    result = self._query(query)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/cursors.py", line 322, in _query
+    conn.query(q)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 558, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 822, in _read_query_result
+    result.read()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 1200, in read
+    first_packet = self.connection._read_packet()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 772, in _read_packet
+    packet.raise_for_error()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/protocol.py", line 221, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/err.py", line 143, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (1054, "Unknown column 'users.hashed_password' in 'field list'")
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password, users.display_name AS users_display_name, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'email_1': 'test3@example.com', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-26 23:53:29,336 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-26 23:54:14,645 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:54:15,377 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:54:16,697 - watchfiles.main - INFO - 3 changes detected
+2025-06-26 23:54:16,746 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-26 23:54:16,746 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:16,747 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-26 23:54:16,747 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:16,748 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-26 23:54:16,748 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:16,750 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:54:16,750 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-26 23:54:16,750 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:16,753 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-26 23:54:16,753 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:16,755 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-26 23:54:16,755 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:16,757 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-26 23:54:16,758 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:16,760 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-26 23:54:16,760 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:16,762 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-26 23:54:17,059 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:54:23,025 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:54:24,245 - watchfiles.main - INFO - 3 changes detected
+2025-06-26 23:54:24,642 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-26 23:54:24,642 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:24,644 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-26 23:54:24,644 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:24,644 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-26 23:54:24,645 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:24,646 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:54:24,646 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-26 23:54:24,646 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:24,649 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-26 23:54:24,649 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:24,651 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-26 23:54:24,652 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:24,654 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-26 23:54:24,654 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:24,657 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-26 23:54:24,657 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:24,659 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-26 23:54:24,767 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:54:31,215 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:54:32,412 - watchfiles.main - INFO - 3 changes detected
+2025-06-26 23:54:32,753 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-26 23:54:32,753 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:32,754 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-26 23:54:32,755 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:32,755 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-26 23:54:32,755 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:32,757 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:54:32,757 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-26 23:54:32,757 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:32,760 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-26 23:54:32,760 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:32,762 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-26 23:54:32,763 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:32,765 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-26 23:54:32,765 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:32,767 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-26 23:54:32,768 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:54:32,770 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-26 23:54:32,882 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:56:09,671 - app.routers.auth - INFO - Registration attempt for user: testuser4, email: test4@example.com
+2025-06-26 23:56:09,698 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:56:09,703 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password_hash AS users_password_hash, users.display_name AS users_display_name, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s
+2025-06-26 23:56:09,703 - sqlalchemy.engine.Engine - INFO - [generated in 0.00048s] {'email_1': 'test4@example.com', 'param_1': 1}
+2025-06-26 23:56:09,704 - app.routers.auth - ERROR - Unexpected error during registration for testuser4: (pymysql.err.OperationalError) (1054, "Unknown column 'users.is_active' in 'field list'")
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password_hash AS users_password_hash, users.display_name AS users_display_name, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'email_1': 'test4@example.com', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Traceback (most recent call last):
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/cursors.py", line 153, in execute
+    result = self._query(query)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/cursors.py", line 322, in _query
+    conn.query(q)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 558, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 822, in _read_query_result
+    result.read()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 1200, in read
+    first_packet = self.connection._read_packet()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 772, in _read_packet
+    packet.raise_for_error()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/protocol.py", line 221, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/err.py", line 143, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'users.is_active' in 'field list'")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/user/Development/slack-clone/backend/app/routers/auth.py", line 84, in register_user
+    db_user = get_user_by_email(db, email=user.email)
+  File "/Users/user/Development/slack-clone/backend/app/routers/auth.py", line 31, in get_user_by_email
+    return db.query(User).filter(User.email == email).first()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2748, in first
+    return self.limit(1)._iter().first()  # type: ignore
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2847, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2308, in execute
+    return self._execute_internal(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2190, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/orm/context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1639, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2343, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/cursors.py", line 153, in execute
+    result = self._query(query)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/cursors.py", line 322, in _query
+    conn.query(q)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 558, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 822, in _read_query_result
+    result.read()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 1200, in read
+    first_packet = self.connection._read_packet()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/connections.py", line 772, in _read_packet
+    packet.raise_for_error()
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/protocol.py", line 221, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/pymysql/err.py", line 143, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (1054, "Unknown column 'users.is_active' in 'field list'")
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password_hash AS users_password_hash, users.display_name AS users_display_name, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'email_1': 'test4@example.com', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-26 23:56:09,733 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-26 23:57:22,209 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:57:22,918 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:57:25,009 - watchfiles.main - INFO - 3 changes detected
+2025-06-26 23:57:25,174 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-26 23:57:25,174 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:25,177 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-26 23:57:25,177 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:25,178 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-26 23:57:25,179 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:25,181 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:57:25,181 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-26 23:57:25,181 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:25,187 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-26 23:57:25,187 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:25,190 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-26 23:57:25,190 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:25,193 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-26 23:57:25,193 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:25,196 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-26 23:57:25,196 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:25,201 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-26 23:57:25,370 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:57:46,435 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:57:48,626 - watchfiles.main - INFO - 3 changes detected
+2025-06-26 23:57:48,719 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-26 23:57:48,720 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:48,721 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-26 23:57:48,721 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:48,721 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-26 23:57:48,721 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:48,722 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:57:48,723 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-26 23:57:48,723 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:48,726 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-26 23:57:48,726 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:48,729 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-26 23:57:48,729 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:48,732 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-26 23:57:48,732 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:48,735 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-26 23:57:48,735 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:57:48,738 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-26 23:57:48,986 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:58:10,830 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:58:15,108 - watchfiles.main - INFO - 3 changes detected
+2025-06-26 23:58:15,226 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-26 23:58:15,226 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:15,228 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-26 23:58:15,228 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:15,229 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-26 23:58:15,230 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:15,231 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:58:15,231 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-26 23:58:15,231 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:15,239 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-26 23:58:15,239 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:15,245 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-26 23:58:15,245 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:15,248 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-26 23:58:15,248 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:15,250 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-26 23:58:15,250 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:15,253 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-26 23:58:15,471 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:58:25,268 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:58:26,956 - watchfiles.main - INFO - 3 changes detected
+2025-06-26 23:58:27,021 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-26 23:58:27,022 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:27,023 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-26 23:58:27,023 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:27,024 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-26 23:58:27,024 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:27,025 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:58:27,026 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-26 23:58:27,026 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:27,028 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-26 23:58:27,028 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:27,030 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-26 23:58:27,031 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:27,033 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-26 23:58:27,033 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:27,036 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-26 23:58:27,036 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:27,039 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-26 23:58:27,318 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:58:51,064 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:58:52,999 - watchfiles.main - INFO - 3 changes detected
+2025-06-26 23:58:53,087 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-26 23:58:53,087 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:53,089 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-26 23:58:53,090 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:53,091 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-26 23:58:53,091 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:53,093 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:58:53,093 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-26 23:58:53,093 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:53,097 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-26 23:58:53,098 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:53,100 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-26 23:58:53,101 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:53,103 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-26 23:58:53,103 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:53,105 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-26 23:58:53,105 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:58:53,107 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-26 23:58:53,360 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:59:02,310 - watchfiles.main - INFO - 1 change detected
+2025-06-26 23:59:03,969 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-26 23:59:03,970 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:59:03,970 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-26 23:59:03,971 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:59:03,971 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-26 23:59:03,971 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:59:03,973 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-26 23:59:03,973 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-26 23:59:03,973 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:59:03,976 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-26 23:59:03,976 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:59:03,979 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-26 23:59:03,979 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:59:03,982 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-26 23:59:03,982 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:59:03,984 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-26 23:59:03,985 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-26 23:59:03,987 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-26 23:59:04,021 - watchfiles.main - INFO - 3 changes detected
+2025-06-26 23:59:04,387 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:02:18,517 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:02:21,309 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-27 00:02:21,309 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:21,311 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-27 00:02:21,311 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:21,312 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-27 00:02:21,313 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:21,316 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:02:21,316 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-27 00:02:21,317 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:21,321 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-27 00:02:21,321 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:21,323 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-27 00:02:21,324 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:21,326 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-27 00:02:21,327 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:21,329 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-27 00:02:21,330 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:21,333 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 00:02:21,337 - watchfiles.main - INFO - 3 changes detected
+2025-06-27 00:02:21,699 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:02:35,612 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:02:37,919 - watchfiles.main - INFO - 3 changes detected
+2025-06-27 00:02:38,066 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-27 00:02:38,066 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:38,068 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-27 00:02:38,068 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:38,070 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-27 00:02:38,070 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:38,074 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:02:38,075 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-27 00:02:38,075 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:38,079 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-27 00:02:38,080 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:38,083 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-27 00:02:38,083 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:38,088 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-27 00:02:38,089 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:38,093 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-27 00:02:38,093 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:38,097 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 00:02:38,277 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:02:42,603 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:02:45,359 - watchfiles.main - INFO - 3 changes detected
+2025-06-27 00:02:45,474 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-27 00:02:45,474 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:45,476 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-27 00:02:45,477 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:45,478 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-27 00:02:45,478 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:45,480 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:02:45,480 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-27 00:02:45,481 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:45,485 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-27 00:02:45,485 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:45,488 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-27 00:02:45,488 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:45,491 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-27 00:02:45,491 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:45,493 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-27 00:02:45,494 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:02:45,497 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 00:02:45,722 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:03:06,156 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:03:08,669 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-27 00:03:08,669 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:08,671 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-27 00:03:08,671 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:08,672 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-27 00:03:08,672 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:08,673 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:03:08,673 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-27 00:03:08,674 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:08,677 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-27 00:03:08,678 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:08,680 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-27 00:03:08,680 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:08,683 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-27 00:03:08,683 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:08,687 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-27 00:03:08,687 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:08,689 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 00:03:08,732 - watchfiles.main - INFO - 3 changes detected
+2025-06-27 00:03:09,093 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:03:11,172 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:03:13,358 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-27 00:03:13,358 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:13,360 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-27 00:03:13,361 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:13,361 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-27 00:03:13,362 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:13,365 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:03:13,365 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-27 00:03:13,366 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:13,369 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-27 00:03:13,369 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:13,372 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-27 00:03:13,372 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:13,375 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-27 00:03:13,375 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:13,379 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-27 00:03:13,379 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:03:13,382 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 00:03:13,387 - watchfiles.main - INFO - 3 changes detected
+2025-06-27 00:03:13,749 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:03:29,298 - app.routers.auth - INFO - Registration attempt for user: testuser5, email: test5@example.com
+2025-06-27 00:03:29,333 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:03:29,341 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s
+2025-06-27 00:03:29,343 - sqlalchemy.engine.Engine - INFO - [generated in 0.00210s] {'email_1': 'test5@example.com', 'param_1': 1}
+2025-06-27 00:03:29,364 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 00:03:29,364 - sqlalchemy.engine.Engine - INFO - [generated in 0.00066s] {'username_1': 'testuser5', 'param_1': 1}
+2025-06-27 00:03:29,379 - app.routers.auth - INFO - Creating new user: testuser5
+2025-06-27 00:03:29,380 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-06-27 00:03:29,795 - sqlalchemy.engine.Engine - INFO - INSERT INTO users (email, username, display_name, password_hash, avatar_url, status, created_at, updated_at) VALUES (%(email)s, %(username)s, %(display_name)s, %(password_hash)s, %(avatar_url)s, %(status)s, now(), now())
+2025-06-27 00:03:29,796 - sqlalchemy.engine.Engine - INFO - [generated in 0.00056s] {'email': 'test5@example.com', 'username': 'testuser5', 'display_name': 'Test User 5', 'password_hash': '$2b$12$3L9t5haOWxuiROeq8pDYN.4Sg2v82j/4BRgcxEpsQvNAORZdm3Fme', 'avatar_url': None, 'status': 'active'}
+2025-06-27 00:03:29,840 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 00:03:29,858 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:03:29,860 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.username, users.display_name, users.password_hash, users.avatar_url, users.status, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = %(pk_1)s
+2025-06-27 00:03:29,860 - sqlalchemy.engine.Engine - INFO - [generated in 0.00063s] {'pk_1': 4}
+2025-06-27 00:03:29,862 - app.routers.auth - INFO - User testuser5 registered successfully with ID: 4
+2025-06-27 00:03:29,867 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 00:03:40,761 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:03:40,763 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 00:03:40,764 - sqlalchemy.engine.Engine - INFO - [cached since 11.4s ago] {'username_1': 'testuser5', 'param_1': 1}
+2025-06-27 00:03:41,132 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 00:04:42,570 - app.routers.auth - INFO - Registration attempt for user: test, email: kakiharasou@gmail.com
+2025-06-27 00:04:42,571 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:04:42,572 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s
+2025-06-27 00:04:42,573 - sqlalchemy.engine.Engine - INFO - [cached since 73.23s ago] {'email_1': 'kakiharasou@gmail.com', 'param_1': 1}
+2025-06-27 00:04:42,575 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 00:04:42,576 - sqlalchemy.engine.Engine - INFO - [cached since 73.21s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 00:04:42,578 - app.routers.auth - INFO - Creating new user: test
+2025-06-27 00:04:42,881 - sqlalchemy.engine.Engine - INFO - INSERT INTO users (email, username, display_name, password_hash, avatar_url, status, created_at, updated_at) VALUES (%(email)s, %(username)s, %(display_name)s, %(password_hash)s, %(avatar_url)s, %(status)s, now(), now())
+2025-06-27 00:04:42,882 - sqlalchemy.engine.Engine - INFO - [cached since 73.09s ago] {'email': 'kakiharasou@gmail.com', 'username': 'test', 'display_name': 'test', 'password_hash': '$2b$12$LLDmnmMGVqmokgoDGoUmwuQTCDWLB5SX0MeQllbEfvNhzFjOKBaDK', 'avatar_url': None, 'status': 'active'}
+2025-06-27 00:04:42,885 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 00:04:42,888 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:04:42,888 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.username, users.display_name, users.password_hash, users.avatar_url, users.status, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = %(pk_1)s
+2025-06-27 00:04:42,888 - sqlalchemy.engine.Engine - INFO - [cached since 73.03s ago] {'pk_1': 5}
+2025-06-27 00:04:42,889 - app.routers.auth - INFO - User test registered successfully with ID: 5
+2025-06-27 00:04:42,891 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 00:04:42,973 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:04:42,975 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 00:04:42,976 - sqlalchemy.engine.Engine - INFO - [cached since 73.61s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 00:04:43,291 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 00:04:43,312 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:04:43,312 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 00:04:43,312 - sqlalchemy.engine.Engine - INFO - [cached since 73.95s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 00:04:43,345 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 00:04:43,432 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:04:43,433 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 00:04:43,433 - sqlalchemy.engine.Engine - INFO - [cached since 74.07s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 00:04:43,441 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 00:04:43,442 - sqlalchemy.engine.Engine - INFO - [generated in 0.00129s] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 00:04:43,447 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 00:04:43,459 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:04:43,460 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 00:04:43,460 - sqlalchemy.engine.Engine - INFO - [cached since 74.1s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 00:04:43,466 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 00:04:43,467 - sqlalchemy.engine.Engine - INFO - [cached since 0.02627s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 00:04:43,472 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 00:04:43,479 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:04:43,480 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 00:04:43,480 - sqlalchemy.engine.Engine - INFO - [cached since 74.12s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 00:04:43,484 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 00:04:43,484 - sqlalchemy.engine.Engine - INFO - [cached since 0.04367s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 00:04:43,487 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 00:04:43,494 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:04:43,495 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 00:04:43,502 - sqlalchemy.engine.Engine - INFO - [cached since 74.14s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 00:04:43,511 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 00:04:43,511 - sqlalchemy.engine.Engine - INFO - [cached since 0.07063s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 00:04:43,514 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 00:07:04,166 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:07:04,840 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:07:06,101 - watchfiles.main - INFO - 3 changes detected
+2025-06-27 00:07:06,167 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-27 00:07:06,167 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:06,168 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-27 00:07:06,168 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:06,169 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-27 00:07:06,169 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:06,170 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:07:06,171 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-27 00:07:06,171 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:06,173 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-27 00:07:06,173 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:06,175 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-27 00:07:06,175 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:06,178 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-27 00:07:06,178 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:06,180 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-27 00:07:06,180 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:06,183 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 00:07:06,462 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:07:11,049 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:07:12,507 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-27 00:07:12,508 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:12,509 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-27 00:07:12,510 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:12,510 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-27 00:07:12,511 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:12,512 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:07:12,512 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-27 00:07:12,512 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:12,515 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-27 00:07:12,515 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:12,517 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-27 00:07:12,517 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:12,519 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-27 00:07:12,520 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:12,522 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-27 00:07:12,523 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:12,525 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 00:07:12,566 - watchfiles.main - INFO - 3 changes detected
+2025-06-27 00:07:12,928 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:07:18,567 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:07:19,900 - watchfiles.main - INFO - 3 changes detected
+2025-06-27 00:07:20,866 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-27 00:07:20,868 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:20,871 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-27 00:07:20,871 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:20,872 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-27 00:07:20,873 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:20,876 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:07:20,877 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-27 00:07:20,877 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:20,886 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-27 00:07:20,887 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:20,895 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-27 00:07:20,895 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:20,897 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-27 00:07:20,898 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:20,903 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-27 00:07:20,903 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:20,907 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 00:07:21,159 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:07:27,098 - watchfiles.main - INFO - 1 change detected
+2025-06-27 00:07:28,764 - watchfiles.main - INFO - 3 changes detected
+2025-06-27 00:07:29,345 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-27 00:07:29,345 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:29,346 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-27 00:07:29,347 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:29,348 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-27 00:07:29,348 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:29,349 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 00:07:29,350 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-27 00:07:29,350 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:29,355 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-27 00:07:29,356 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:29,359 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-27 00:07:29,359 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:29,362 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-27 00:07:29,363 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:29,366 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-27 00:07:29,366 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 00:07:29,368 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 00:07:29,551 - watchfiles.main - INFO - 1 change detected
