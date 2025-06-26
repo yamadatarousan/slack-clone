@@ -11,7 +11,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarProps) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [channels, setChannels] = useState<Channel[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -25,7 +25,18 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
   const loadChannels = async () => {
     try {
       const channelsData = await apiService.getChannels();
-      setChannels(channelsData);
+      console.log('Loaded channels:', channelsData);
+      
+      // Remove duplicates based on channel ID to prevent display issues
+      const uniqueChannels = channelsData.filter((channel, index, self) => 
+        index === self.findIndex(c => c.id === channel.id)
+      );
+      
+      if (channelsData.length !== uniqueChannels.length) {
+        console.warn(`Removed ${channelsData.length - uniqueChannels.length} duplicate channels`);
+      }
+      
+      setChannels(uniqueChannels);
     } catch (error) {
       console.error('Failed to load channels:', error);
     } finally {
@@ -105,24 +116,31 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
               <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10">
                 <button
                   onClick={() => handleStatusChange('active')}
-                  className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center space-x-2"
+                  className="w-full px-3 py-2 text-left text-sm text-gray-900 hover:bg-gray-100 flex items-center space-x-2"
                 >
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                   <span>アクティブ</span>
                 </button>
                 <button
                   onClick={() => handleStatusChange('away')}
-                  className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center space-x-2"
+                  className="w-full px-3 py-2 text-left text-sm text-gray-900 hover:bg-gray-100 flex items-center space-x-2"
                 >
                   <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
                   <span>離席中</span>
                 </button>
                 <button
                   onClick={() => handleStatusChange('busy')}
-                  className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center space-x-2"
+                  className="w-full px-3 py-2 text-left text-sm text-gray-900 hover:bg-gray-100 flex items-center space-x-2"
                 >
                   <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                   <span>取り込み中</span>
+                </button>
+                <hr className="border-gray-300" />
+                <button
+                  onClick={logout}
+                  className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center space-x-2 text-red-600"
+                >
+                  <span>ログアウト</span>
                 </button>
               </div>
             )}
