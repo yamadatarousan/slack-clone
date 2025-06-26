@@ -45,19 +45,8 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
       // Listen for new messages
       const unsubscribe = websocketService.onMessage((message) => {
         if (message.type === 'message' && message.channel_id === channel.id.toString()) {
-          // Add new message to the list
-          const newMessage: Message = {
-            id: Date.now(), // Temporary ID
-            content: message.content || '',
-            channel_id: parseInt(message.channel_id),
-            sender_id: parseInt(message.user_id || '0'),
-            is_edited: false,
-            is_deleted: false,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          };
-          
-          setMessages(prev => [...prev, newMessage]);
+          // Reload messages from server to get proper formatting and sender info
+          loadMessages();
         }
       });
 
@@ -92,10 +81,11 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
       // Also send via WebSocket for real-time
       websocketService.sendChatMessage(content, channel.id.toString());
       
-      // Reload messages to get the persistent version
-      await loadMessages();
+      // Messages will be reloaded via WebSocket message handler
     } catch (error) {
       console.error('Failed to send message:', error);
+      // On error, reload messages to ensure consistency
+      await loadMessages();
     }
   };
 

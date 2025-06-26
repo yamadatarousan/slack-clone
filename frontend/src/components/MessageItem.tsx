@@ -18,6 +18,8 @@ export default function MessageItem({ message, showHeader, isOwn }: MessageItemP
     if (message.sender) {
       return message.sender.display_name || message.sender.username;
     }
+    // Log for debugging
+    console.log('Message without sender:', message);
     return `User ${message.user_id || message.sender_id}`;
   };
 
