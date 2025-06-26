@@ -7,14 +7,6 @@ interface MessageListProps {
 }
 
 export default function MessageList({ messages, currentUser }: MessageListProps) {
-  console.log('MessageList received messages:', messages);
-  console.log('Messages with sender info:', messages.map(m => ({
-    id: m.id,
-    content: m.content.substring(0, 20) + '...',
-    hasSender: !!m.sender,
-    sender: m.sender
-  })));
-  
   if (messages.length === 0) {
     return (
       <div className="h-full flex items-center justify-center text-gray-500">
@@ -31,7 +23,7 @@ export default function MessageList({ messages, currentUser }: MessageListProps)
       {messages.map((message, index) => {
         const previousMessage = index > 0 ? messages[index - 1] : null;
         const showHeader = !previousMessage || 
-          previousMessage.sender_id !== message.sender_id ||
+          previousMessage.user_id !== message.user_id ||
           (new Date(message.created_at).getTime() - new Date(previousMessage.created_at).getTime()) > 300000; // 5 minutes
 
         return (
@@ -39,7 +31,7 @@ export default function MessageList({ messages, currentUser }: MessageListProps)
             key={message.id}
             message={message}
             showHeader={showHeader}
-            isOwn={currentUser?.id === message.sender_id}
+            isOwn={currentUser?.id === message.user_id}
           />
         );
       })}

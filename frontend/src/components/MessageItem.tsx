@@ -18,14 +18,6 @@ export default function MessageItem({ message, showHeader, isOwn }: MessageItemP
     if (message.sender) {
       return message.sender.display_name || message.sender.username;
     }
-    // Comprehensive debugging for missing sender info
-    console.warn('Message missing sender info:', {
-      id: message.id,
-      user_id: message.user_id,
-      sender_id: message.sender_id,
-      sender: message.sender,
-      fullMessage: message
-    });
     return `User ${message.user_id || message.sender_id || 'Unknown'}`;
   };
 
@@ -38,7 +30,7 @@ export default function MessageItem({ message, showHeader, isOwn }: MessageItemP
     <div className={`group ${isOwn ? 'ml-12' : ''}`}>
       {showHeader ? (
         <div className="flex items-start space-x-3">
-          <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
             <span className="text-white font-medium text-sm">
               {getAvatarInitial()}
             </span>

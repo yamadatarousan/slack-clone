@@ -91,7 +91,6 @@ class ApiService {
     const response: AxiosResponse<Message[]> = await this.api.get(
       `/messages/channel/${channelId}?skip=${skip}&limit=${limit}`
     );
-    console.log('API getChannelMessages response:', response.data);
     return response.data;
   }
 
