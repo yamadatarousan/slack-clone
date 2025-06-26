@@ -83,6 +83,21 @@ def get_channels(
     return channels
 
 
+@router.get("/public", response_model=List[ChannelResponse])
+def get_public_channels(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Get all public channels
+    channels = db.query(Channel).filter(
+        Channel.channel_type == 'public'
+    ).offset(skip).limit(limit).all()
+    
+    return channels
+
+
 @router.get("/{channel_id}", response_model=ChannelResponse)
 def get_channel(
     channel_id: int,
@@ -120,7 +135,7 @@ def update_channel(
     member = db.query(channel_members).filter(
         channel_members.c.user_id == current_user.id,
         channel_members.c.channel_id == channel_id,
-        channel_members.c.is_admin == True
+        channel_members.c.role.in_(['admin', 'owner'])
     ).first()
     
     if not member:
@@ -141,7 +156,7 @@ def update_channel(
         channel.description = channel_update.description
     
     if channel_update.is_private is not None:
-        channel.is_private = channel_update.is_private
+        channel.channel_type = 'private' if channel_update.is_private else 'public'
     
     db.commit()
     db.refresh(channel)
@@ -158,7 +173,7 @@ def join_channel(
     if not channel:
         raise HTTPException(status_code=404, detail="Channel not found")
     
-    if channel.is_private:
+    if channel.channel_type == 'private':
         raise HTTPException(status_code=403, detail="Cannot join private channel")
     
     # Check if already a member
@@ -175,7 +190,7 @@ def join_channel(
         channel_members.insert().values(
             user_id=current_user.id,
             channel_id=channel_id,
-            is_admin=False
+            role='member'
         )
     )
     db.commit()

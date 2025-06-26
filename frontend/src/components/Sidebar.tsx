@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Channel } from '../types';
 import { apiService } from '../services/api';
 import { CreateChannelModal } from './CreateChannelModal';
+import { ChannelBrowser } from './ChannelBrowser';
 import { useAuth } from '../hooks/useAuth';
 
 interface SidebarProps {
@@ -14,6 +15,7 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
   const [channels, setChannels] = useState<Channel[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showChannelBrowser, setShowChannelBrowser] = useState(false);
 
   useEffect(() => {
     loadChannels();
@@ -57,7 +59,7 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
                   onClick={() => onChannelSelect?.(channel)}
                   className={`w-full text-left px-2 py-1 rounded text-sm transition-colors ${
                     selectedChannelId === channel.id
-                      ? 'bg-primary-600 text-white'
+                      ? 'bg-blue-600 text-white'
                       : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                   }`}
                 >
@@ -77,7 +79,7 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
                     onClick={() => onChannelSelect?.(channel)}
                     className={`w-full text-left px-2 py-1 rounded text-sm transition-colors ${
                       selectedChannelId === channel.id
-                        ? 'bg-primary-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                     }`}
                   >
@@ -98,7 +100,7 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
                     onClick={() => onChannelSelect?.(channel)}
                     className={`w-full text-left px-2 py-1 rounded text-sm transition-colors ${
                       selectedChannelId === channel.id
-                        ? 'bg-primary-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                     }`}
                   >
@@ -112,12 +114,18 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
       </div>
       
       {/* Add channel button */}
-      <div className="p-4 border-t border-gray-700">
+      <div className="p-4 border-t border-gray-700 space-y-2">
         <button 
           onClick={() => setShowCreateModal(true)}
           className="w-full text-left text-gray-300 hover:text-white text-sm transition-colors"
         >
           + チャンネルを追加
+        </button>
+        <button 
+          onClick={() => setShowChannelBrowser(true)}
+          className="w-full text-left text-gray-300 hover:text-white text-sm transition-colors"
+        >
+          📋 チャンネルを参照
         </button>
       </div>
 
@@ -125,6 +133,12 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onChannelCreated={loadChannels}
+      />
+
+      <ChannelBrowser
+        isOpen={showChannelBrowser}
+        onClose={() => setShowChannelBrowser(false)}
+        onChannelJoined={loadChannels}
       />
     </div>
   );

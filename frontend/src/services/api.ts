@@ -86,6 +86,11 @@ class ApiService {
     return response.data;
   }
 
+  async getAllPublicChannels(): Promise<Channel[]> {
+    const response: AxiosResponse<Channel[]> = await this.api.get('/channels/public');
+    return response.data;
+  }
+
   // Messages
   async getChannelMessages(channelId: number, skip = 0, limit = 50): Promise<Message[]> {
     const response: AxiosResponse<Message[]> = await this.api.get(
