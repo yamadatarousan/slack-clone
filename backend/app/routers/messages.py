@@ -48,6 +48,17 @@ def create_message(
         db.refresh(db_message)
         logger.info(f"Message created successfully with ID: {db_message.id}")
         
+        # Get sender information separately to avoid relationship loading issues
+        sender = db.query(User).filter(User.id == db_message.user_id).first()
+        sender_data = None
+        if sender:
+            sender_data = {
+                "id": sender.id,
+                "username": sender.username,
+                "display_name": sender.display_name,
+                "avatar_url": sender.avatar_url
+            }
+        
         # Manually serialize the response to avoid relationship loading issues
         response_data = {
             "id": db_message.id,
@@ -59,7 +70,7 @@ def create_message(
             "edited": db_message.edited,
             "created_at": db_message.created_at,
             "updated_at": db_message.updated_at,
-            "sender": None,  # Skip relationship for now
+            "sender": sender_data,
             "reactions": [],
             "reply_count": 0
         }
@@ -100,6 +111,17 @@ def get_channel_messages(
     # Manually serialize the response to avoid relationship loading issues
     serialized_messages = []
     for msg in messages:
+        # Get sender information separately
+        sender = db.query(User).filter(User.id == msg.user_id).first()
+        sender_data = None
+        if sender:
+            sender_data = {
+                "id": sender.id,
+                "username": sender.username,
+                "display_name": sender.display_name,
+                "avatar_url": sender.avatar_url
+            }
+        
         message_data = {
             "id": msg.id,
             "content": msg.content,
@@ -110,7 +132,7 @@ def get_channel_messages(
             "edited": msg.edited,
             "created_at": msg.created_at,
             "updated_at": msg.updated_at,
-            "sender": None,  # Skip relationship for now
+            "sender": sender_data,
             "reactions": [],
             "reply_count": 0
         }
@@ -139,6 +161,17 @@ def get_message(
     if not member and channel.channel_type == 'private':
         raise HTTPException(status_code=403, detail="Access denied")
     
+    # Get sender information separately
+    sender = db.query(User).filter(User.id == message.user_id).first()
+    sender_data = None
+    if sender:
+        sender_data = {
+            "id": sender.id,
+            "username": sender.username,
+            "display_name": sender.display_name,
+            "avatar_url": sender.avatar_url
+        }
+    
     # Manually serialize the response to avoid relationship loading issues
     response_data = {
         "id": message.id,
@@ -150,7 +183,7 @@ def get_message(
         "edited": message.edited,
         "created_at": message.created_at,
         "updated_at": message.updated_at,
-        "sender": None,  # Skip relationship for now
+        "sender": sender_data,
         "reactions": [],
         "reply_count": 0
     }
@@ -180,6 +213,17 @@ def update_message(
     db.commit()
     db.refresh(message)
     
+    # Get sender information separately
+    sender = db.query(User).filter(User.id == message.user_id).first()
+    sender_data = None
+    if sender:
+        sender_data = {
+            "id": sender.id,
+            "username": sender.username,
+            "display_name": sender.display_name,
+            "avatar_url": sender.avatar_url
+        }
+    
     # Manually serialize the response to avoid relationship loading issues
     response_data = {
         "id": message.id,
@@ -191,7 +235,7 @@ def update_message(
         "edited": message.edited,
         "created_at": message.created_at,
         "updated_at": message.updated_at,
-        "sender": None,  # Skip relationship for now
+        "sender": sender_data,
         "reactions": [],
         "reply_count": 0
     }
@@ -303,6 +347,17 @@ def get_message_thread(
     # Manually serialize the response to avoid relationship loading issues
     serialized_messages = []
     for msg in thread_messages:
+        # Get sender information separately
+        sender = db.query(User).filter(User.id == msg.user_id).first()
+        sender_data = None
+        if sender:
+            sender_data = {
+                "id": sender.id,
+                "username": sender.username,
+                "display_name": sender.display_name,
+                "avatar_url": sender.avatar_url
+            }
+        
         message_data = {
             "id": msg.id,
             "content": msg.content,
@@ -313,7 +368,7 @@ def get_message_thread(
             "edited": msg.edited,
             "created_at": msg.created_at,
             "updated_at": msg.updated_at,
-            "sender": None,  # Skip relationship for now
+            "sender": sender_data,
             "reactions": [],
             "reply_count": 0
         }
