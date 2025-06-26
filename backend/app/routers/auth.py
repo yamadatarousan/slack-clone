@@ -165,3 +165,22 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
 @router.get("/me", response_model=UserResponse)
 def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+
+@router.put("/me/status")
+def update_user_status(
+    status: str,
+    is_online: bool = True,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Validate status
+    valid_statuses = ['active', 'away', 'busy']
+    if status not in valid_statuses:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    
+    current_user.status = status
+    current_user.is_online = is_online
+    db.commit()
+    
+    return {"message": "Status updated successfully"}

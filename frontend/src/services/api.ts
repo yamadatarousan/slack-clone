@@ -119,6 +119,11 @@ class ApiService {
     return response.data;
   }
 
+  async updateUserStatus(status: string, isOnline: boolean = true): Promise<{ message: string }> {
+    const response: AxiosResponse<{ message: string }> = await this.api.put(`/auth/me/status?status=${status}&is_online=${isOnline}`);
+    return response.data;
+  }
+
   // Health check
   async healthCheck(): Promise<{ status: string }> {
     const response: AxiosResponse<{ status: string }> = await this.api.get('/health');

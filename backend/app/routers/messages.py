@@ -56,7 +56,9 @@ def create_message(
                 "id": sender.id,
                 "username": sender.username,
                 "display_name": sender.display_name,
-                "avatar_url": sender.avatar_url
+                "avatar_url": sender.avatar_url,
+                "status": sender.status,
+                "is_online": sender.is_online
             }
         
         # Manually serialize the response to avoid relationship loading issues
@@ -119,7 +121,9 @@ def get_channel_messages(
                 "id": sender.id,
                 "username": sender.username,
                 "display_name": sender.display_name,
-                "avatar_url": sender.avatar_url
+                "avatar_url": sender.avatar_url,
+                "status": sender.status,
+                "is_online": sender.is_online
             }
         
         message_data = {
@@ -355,7 +359,9 @@ def get_message_thread(
                 "id": sender.id,
                 "username": sender.username,
                 "display_name": sender.display_name,
-                "avatar_url": sender.avatar_url
+                "avatar_url": sender.avatar_url,
+                "status": sender.status,
+                "is_online": sender.is_online
             }
         
         message_data = {

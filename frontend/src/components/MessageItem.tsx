@@ -42,14 +42,29 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
 
   const popularEmojis = ['👍', '👎', '😀', '😢', '😮', '❤️', '🎉', '🚀'];
 
+  const getStatusColor = (sender: any) => {
+    if (!sender || !sender.is_online) return 'bg-gray-400';
+    switch (sender.status) {
+      case 'active': return 'bg-green-400';
+      case 'away': return 'bg-yellow-400';
+      case 'busy': return 'bg-red-400';
+      default: return 'bg-gray-400';
+    }
+  };
+
   return (
     <div className="group">
       {showHeader ? (
         <div className="flex items-start space-x-3">
-          <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-            <span className="text-white font-medium text-sm">
-              {getAvatarInitial()}
-            </span>
+          <div className="relative">
+            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-medium text-sm">
+                {getAvatarInitial()}
+              </span>
+            </div>
+            {message.sender && (
+              <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${getStatusColor(message.sender)}`}></div>
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-baseline space-x-2">
