@@ -27,7 +27,7 @@ export default function MessageItem({ message, showHeader, isOwn }: MessageItemP
   };
 
   return (
-    <div className={`group ${isOwn ? 'ml-12' : ''}`}>
+    <div className="group">
       {showHeader ? (
         <div className="flex items-start space-x-3">
           <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
