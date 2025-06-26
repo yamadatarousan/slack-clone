@@ -25,6 +25,8 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     avatar_url = Column(Text, nullable=True)
     status = Column(String(20), default='active')  # enum: active, away, busy, offline
+    is_online = Column(Boolean, default=False)
+    last_seen = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 

@@ -126,20 +126,18 @@ class ApiService {
 
 export const apiService = new ApiService();
 
-// Export individual functions for convenience
-export const { 
-  login, 
-  register, 
-  getMe, 
-  getChannels, 
-  getChannel, 
-  createChannel, 
-  joinChannel, 
-  leaveChannel,
-  getChannelMessages,
-  sendMessage,
-  updateMessage,
-  deleteMessage,
-  addReaction,
-  healthCheck
-} = apiService;
+// Export individual functions for convenience with proper binding
+export const login = (credentials: LoginCredentials) => apiService.login(credentials);
+export const register = (data: RegisterData) => apiService.register(data);
+export const getMe = () => apiService.getMe();
+export const getChannels = () => apiService.getChannels();
+export const getChannel = (id: number) => apiService.getChannel(id);
+export const createChannel = (data: { name: string; description?: string; is_private?: boolean }) => apiService.createChannel(data);
+export const joinChannel = (id: number) => apiService.joinChannel(id);
+export const leaveChannel = (id: number) => apiService.leaveChannel(id);
+export const getChannelMessages = (channelId: number, skip = 0, limit = 50) => apiService.getChannelMessages(channelId, skip, limit);
+export const sendMessage = (data: { content: string; channel_id: number; parent_message_id?: number }) => apiService.sendMessage(data);
+export const updateMessage = (id: number, data: { content: string }) => apiService.updateMessage(id, data);
+export const deleteMessage = (id: number) => apiService.deleteMessage(id);
+export const addReaction = (messageId: number, emoji: string) => apiService.addReaction(messageId, emoji);
+export const healthCheck = () => apiService.healthCheck();

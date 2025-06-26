@@ -19,6 +19,8 @@ class ChannelCreate(ChannelBase):
 
 class ChannelResponse(ChannelBase):
     id: int
+    channel_type: str  # Add the actual field used in database
+    is_archived: bool = False
     created_by: int
     created_at: datetime
     updated_at: datetime

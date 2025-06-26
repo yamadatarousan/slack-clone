@@ -18,11 +18,14 @@ class MessageBase(BaseModel):
 class MessageCreate(MessageBase):
     pass
 
-class MessageResponse(MessageBase):
+class MessageResponse(BaseModel):
     id: int
-    sender_id: int
-    is_edited: bool = False
-    is_deleted: bool = False
+    content: str
+    channel_id: int
+    user_id: int  # Updated field name
+    message_type: str = "text"
+    thread_id: Optional[int] = None  # Updated field name
+    edited: bool = False  # Updated field name
     created_at: datetime
     updated_at: datetime
     

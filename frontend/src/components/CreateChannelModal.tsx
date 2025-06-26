@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createChannel } from '../services/api';
+import { useAuth } from '../hooks/useAuth';
 
 interface CreateChannelModalProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ export const CreateChannelModal: React.FC<CreateChannelModalProps> = ({
   onClose, 
   onChannelCreated 
 }) => {
+  const { user } = useAuth();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
@@ -26,7 +28,8 @@ export const CreateChannelModal: React.FC<CreateChannelModalProps> = ({
     setError('');
 
     try {
-      await createChannel({
+      
+      const result = await createChannel({
         name: name.trim(),
         description: description.trim(),
         is_private: isPrivate
@@ -38,7 +41,8 @@ export const CreateChannelModal: React.FC<CreateChannelModalProps> = ({
       onChannelCreated();
       onClose();
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to create channel');
+      console.error('Error creating channel:', err);
+      setError(err.response?.data?.detail || err.message || 'Failed to create channel');
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +74,7 @@ export const CreateChannelModal: React.FC<CreateChannelModalProps> = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., marketing"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
               maxLength={80}
               required
             />
@@ -86,7 +90,7 @@ export const CreateChannelModal: React.FC<CreateChannelModalProps> = ({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="What's this channel about?"
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
             />
           </div>
 
@@ -123,7 +127,7 @@ export const CreateChannelModal: React.FC<CreateChannelModalProps> = ({
             <button
               type="submit"
               disabled={isLoading || !name.trim()}
-              className="btn btn-primary disabled:opacity-50"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Creating...' : 'Create Channel'}
             </button>

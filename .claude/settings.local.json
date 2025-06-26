@@ -18,7 +18,10 @@
       "Bash(mkdir:*)",
       "Bash(mysql:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(uvicorn:*)",
+      "Bash(pkill:*)"
     ],
     "deny": []
   }

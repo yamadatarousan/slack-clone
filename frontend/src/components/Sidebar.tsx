@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Channel } from '../types';
 import { apiService } from '../services/api';
 import { CreateChannelModal } from './CreateChannelModal';
+import { useAuth } from '../hooks/useAuth';
 
 interface SidebarProps {
   selectedChannelId?: number;
@@ -9,6 +10,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarProps) {
+  const { user } = useAuth();
   const [channels, setChannels] = useState<Channel[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);

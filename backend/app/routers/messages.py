@@ -47,7 +47,23 @@ def create_message(
         db.commit()
         db.refresh(db_message)
         logger.info(f"Message created successfully with ID: {db_message.id}")
-        return db_message
+        
+        # Manually serialize the response to avoid relationship loading issues
+        response_data = {
+            "id": db_message.id,
+            "content": db_message.content,
+            "channel_id": db_message.channel_id,
+            "user_id": db_message.user_id,
+            "message_type": db_message.message_type,
+            "thread_id": db_message.thread_id,
+            "edited": db_message.edited,
+            "created_at": db_message.created_at,
+            "updated_at": db_message.updated_at,
+            "sender": None,  # Skip relationship for now
+            "reactions": [],
+            "reply_count": 0
+        }
+        return response_data
     except Exception as e:
         logger.error(f"Error creating message: {str(e)}", exc_info=True)
         db.rollback()
@@ -81,7 +97,26 @@ def get_channel_messages(
         Message.channel_id == channel_id
     ).order_by(Message.created_at.desc()).offset(skip).limit(limit).all()
     
-    return messages[::-1]  # Return in chronological order
+    # Manually serialize the response to avoid relationship loading issues
+    serialized_messages = []
+    for msg in messages:
+        message_data = {
+            "id": msg.id,
+            "content": msg.content,
+            "channel_id": msg.channel_id,
+            "user_id": msg.user_id,
+            "message_type": msg.message_type,
+            "thread_id": msg.thread_id,
+            "edited": msg.edited,
+            "created_at": msg.created_at,
+            "updated_at": msg.updated_at,
+            "sender": None,  # Skip relationship for now
+            "reactions": [],
+            "reply_count": 0
+        }
+        serialized_messages.append(message_data)
+    
+    return serialized_messages[::-1]  # Return in chronological order
 
 
 @router.get("/{message_id}", response_model=MessageResponse)
@@ -104,7 +139,22 @@ def get_message(
     if not member and channel.channel_type == 'private':
         raise HTTPException(status_code=403, detail="Access denied")
     
-    return message
+    # Manually serialize the response to avoid relationship loading issues
+    response_data = {
+        "id": message.id,
+        "content": message.content,
+        "channel_id": message.channel_id,
+        "user_id": message.user_id,
+        "message_type": message.message_type,
+        "thread_id": message.thread_id,
+        "edited": message.edited,
+        "created_at": message.created_at,
+        "updated_at": message.updated_at,
+        "sender": None,  # Skip relationship for now
+        "reactions": [],
+        "reply_count": 0
+    }
+    return response_data
 
 
 @router.put("/{message_id}", response_model=MessageResponse)
@@ -129,7 +179,23 @@ def update_message(
     
     db.commit()
     db.refresh(message)
-    return message
+    
+    # Manually serialize the response to avoid relationship loading issues
+    response_data = {
+        "id": message.id,
+        "content": message.content,
+        "channel_id": message.channel_id,
+        "user_id": message.user_id,
+        "message_type": message.message_type,
+        "thread_id": message.thread_id,
+        "edited": message.edited,
+        "created_at": message.created_at,
+        "updated_at": message.updated_at,
+        "sender": None,  # Skip relationship for now
+        "reactions": [],
+        "reply_count": 0
+    }
+    return response_data
 
 
 @router.delete("/{message_id}")
@@ -234,4 +300,23 @@ def get_message_thread(
         Message.thread_id == message_id
     ).order_by(Message.created_at.asc()).offset(skip).limit(limit).all()
     
-    return thread_messages
+    # Manually serialize the response to avoid relationship loading issues
+    serialized_messages = []
+    for msg in thread_messages:
+        message_data = {
+            "id": msg.id,
+            "content": msg.content,
+            "channel_id": msg.channel_id,
+            "user_id": msg.user_id,
+            "message_type": msg.message_type,
+            "thread_id": msg.thread_id,
+            "edited": msg.edited,
+            "created_at": msg.created_at,
+            "updated_at": msg.updated_at,
+            "sender": None,  # Skip relationship for now
+            "reactions": [],
+            "reply_count": 0
+        }
+        serialized_messages.append(message_data)
+    
+    return serialized_messages

@@ -1,11 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
+import logging
 
 from app.database.base import get_db
 from app.database.models import Channel, User, channel_members
 from app.models.channel import ChannelCreate, ChannelResponse, ChannelUpdate
 from app.routers.auth import get_current_user
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -16,36 +19,53 @@ def create_channel(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    # Check if channel name already exists
-    existing_channel = db.query(Channel).filter(Channel.name == channel.name).first()
-    if existing_channel:
+    try:
+        logger.info(f"Channel creation request from user {current_user.username}: {channel.dict()}")
+        
+        # Check if channel name already exists
+        existing_channel = db.query(Channel).filter(Channel.name == channel.name).first()
+        if existing_channel:
+            logger.warning(f"Channel name {channel.name} already exists")
+            raise HTTPException(
+                status_code=400,
+                detail="Channel name already exists"
+            )
+    
+        # Create new channel
+        logger.info(f"Creating new channel: {channel.name}")
+        db_channel = Channel(
+            name=channel.name,
+            description=channel.description,
+            channel_type='private' if channel.is_private else 'public',
+            created_by=current_user.id
+        )
+        db.add(db_channel)
+        db.commit()
+        db.refresh(db_channel)
+        
+        # Add creator as channel member and admin
+        logger.info(f"Adding user {current_user.id} as owner of channel {db_channel.id}")
+        db.execute(
+            channel_members.insert().values(
+                user_id=current_user.id,
+                channel_id=db_channel.id,
+                role='owner'
+            )
+        )
+        db.commit()
+        
+        logger.info(f"Channel {channel.name} created successfully with ID: {db_channel.id}")
+        return db_channel
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error creating channel {channel.name}: {str(e)}", exc_info=True)
+        db.rollback()
         raise HTTPException(
-            status_code=400,
-            detail="Channel name already exists"
+            status_code=500,
+            detail=f"Failed to create channel: {str(e)}"
         )
-    
-    # Create new channel
-    db_channel = Channel(
-        name=channel.name,
-        description=channel.description,
-        channel_type='private' if channel.is_private else 'public',
-        created_by=current_user.id
-    )
-    db.add(db_channel)
-    db.commit()
-    db.refresh(db_channel)
-    
-    # Add creator as channel member and admin
-    db.execute(
-        channel_members.insert().values(
-            user_id=current_user.id,
-            channel_id=db_channel.id,
-            role='owner'
-        )
-    )
-    db.commit()
-    
-    return db_channel
 
 
 @router.get("/", response_model=List[ChannelResponse])
