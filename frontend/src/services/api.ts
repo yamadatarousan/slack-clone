@@ -115,10 +115,7 @@ class ApiService {
   }
 
   async addReaction(messageId: number, emoji: string): Promise<{ message: string }> {
-    const response: AxiosResponse<{ message: string }> = await this.api.post(
-      `/messages/${messageId}/reactions`,
-      { emoji }
-    );
+    const response: AxiosResponse<{ message: string }> = await this.api.post(`/messages/${messageId}/reactions`, { emoji });
     return response.data;
   }
 

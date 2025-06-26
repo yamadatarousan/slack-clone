@@ -13211,3 +13211,742 @@ WHERE channel_members.user_id = %(user_id_1)s
  LIMIT %(param_1)s, %(param_2)s
 2025-06-27 05:27:30,182 - sqlalchemy.engine.Engine - INFO - [cached since 489.6s ago] {'user_id_1': 9, 'param_1': 0, 'param_2': 100}
 2025-06-27 05:27:30,185 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:27:47,928 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:27:47,929 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:27:47,929 - sqlalchemy.engine.Engine - INFO - [cached since 507.4s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:27:47,944 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:27:47,961 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:27:47,962 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:27:47,962 - sqlalchemy.engine.Engine - INFO - [cached since 507.4s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:27:47,969 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:27:48,014 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:27:48,014 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:27:48,015 - sqlalchemy.engine.Engine - INFO - [cached since 507.4s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:27:48,026 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:27:48,026 - sqlalchemy.engine.Engine - INFO - [cached since 507.4s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:27:48,031 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:27:48,039 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:27:48,040 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:27:48,040 - sqlalchemy.engine.Engine - INFO - [cached since 507.5s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:27:48,050 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:27:48,050 - sqlalchemy.engine.Engine - INFO - [cached since 507.5s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:27:48,059 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:27:48,062 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:27:48,063 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:27:48,063 - sqlalchemy.engine.Engine - INFO - [cached since 507.5s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:27:48,067 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:27:48,068 - sqlalchemy.engine.Engine - INFO - [cached since 507.5s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:27:48,074 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:27:48,079 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:27:48,080 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:27:48,080 - sqlalchemy.engine.Engine - INFO - [cached since 507.5s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:27:48,083 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:27:48,084 - sqlalchemy.engine.Engine - INFO - [cached since 507.5s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:27:48,089 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:27:52,746 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:27:52,747 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:27:52,747 - sqlalchemy.engine.Engine - INFO - [cached since 512.2s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:27:52,757 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:27:52,757 - sqlalchemy.engine.Engine - INFO - [cached since 512.2s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:27:52,760 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:27:52,812 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:27:52,813 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:27:52,814 - sqlalchemy.engine.Engine - INFO - [cached since 512.2s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:27:52,817 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels 
+WHERE channels.channel_type = %(channel_type_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:27:52,818 - sqlalchemy.engine.Engine - INFO - [cached since 418.4s ago] {'channel_type_1': 'public', 'param_1': 0, 'param_2': 100}
+2025-06-27 05:27:52,822 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:28:24,204 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:28:24,205 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:24,205 - sqlalchemy.engine.Engine - INFO - [cached since 543.6s ago] {'username_1': 'hoge', 'param_1': 1}
+2025-06-27 05:28:24,207 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.email = %(email_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:24,208 - sqlalchemy.engine.Engine - INFO - [generated in 0.00032s] {'email_1': 'hoge', 'param_1': 1}
+2025-06-27 05:28:24,209 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:28:47,034 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:28:47,036 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:47,036 - sqlalchemy.engine.Engine - INFO - [cached since 566.5s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:28:47,039 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/user/.pyenv/versions/3.8.19/lib/python3.8/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-06-27 05:28:47,375 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:28:47,381 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:28:47,381 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:47,381 - sqlalchemy.engine.Engine - INFO - [cached since 566.8s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:28:47,385 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:28:47,403 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:28:47,404 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:47,404 - sqlalchemy.engine.Engine - INFO - [cached since 566.8s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:28:47,407 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:28:47,407 - sqlalchemy.engine.Engine - INFO - [cached since 566.8s ago] {'user_id_1': 8, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:28:47,411 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:28:49,859 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:28:49,859 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:49,859 - sqlalchemy.engine.Engine - INFO - [cached since 569.3s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:28:49,861 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:28:49,862 - sqlalchemy.engine.Engine - INFO - [cached since 569.3s ago] {'user_id_1': 8, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:28:49,865 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:28:49,873 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:28:49,873 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:49,874 - sqlalchemy.engine.Engine - INFO - [cached since 569.3s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:28:49,875 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels 
+WHERE channels.channel_type = %(channel_type_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:28:49,876 - sqlalchemy.engine.Engine - INFO - [cached since 475.4s ago] {'channel_type_1': 'public', 'param_1': 0, 'param_2': 100}
+2025-06-27 05:28:49,878 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:28:54,023 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:28:54,024 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:54,024 - sqlalchemy.engine.Engine - INFO - [cached since 573.5s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:28:54,026 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels 
+WHERE channels.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:54,027 - sqlalchemy.engine.Engine - INFO - [cached since 444.8s ago] {'id_1': 10, 'param_1': 1}
+2025-06-27 05:28:54,028 - sqlalchemy.engine.Engine - INFO - SELECT channel_members.id AS channel_members_id, channel_members.user_id AS channel_members_user_id, channel_members.channel_id AS channel_members_channel_id, channel_members.`role` AS channel_members_role, channel_members.joined_at AS channel_members_joined_at 
+FROM channel_members 
+WHERE channel_members.user_id = %(user_id_1)s AND channel_members.channel_id = %(channel_id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:54,029 - sqlalchemy.engine.Engine - INFO - [cached since 444.8s ago] {'user_id_1': 8, 'channel_id_1': 10, 'param_1': 1}
+2025-06-27 05:28:54,031 - sqlalchemy.engine.Engine - INFO - INSERT INTO channel_members (user_id, channel_id, `role`, joined_at) VALUES (%(user_id)s, %(channel_id)s, %(role)s, now())
+2025-06-27 05:28:54,032 - sqlalchemy.engine.Engine - INFO - [cached since 444.8s ago] {'user_id': 8, 'channel_id': 10, 'role': 'member'}
+2025-06-27 05:28:54,034 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 05:28:54,044 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:28:54,044 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:54,045 - sqlalchemy.engine.Engine - INFO - [cached since 573.5s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:28:54,048 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:28:54,048 - sqlalchemy.engine.Engine - INFO - [cached since 573.5s ago] {'user_id_1': 8, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:28:54,052 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:28:59,621 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:28:59,621 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:59,621 - sqlalchemy.engine.Engine - INFO - [cached since 579.1s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:28:59,624 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels 
+WHERE channels.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:59,625 - sqlalchemy.engine.Engine - INFO - [cached since 450.4s ago] {'id_1': 10, 'param_1': 1}
+2025-06-27 05:28:59,626 - sqlalchemy.engine.Engine - INFO - SELECT channel_members.id AS channel_members_id, channel_members.user_id AS channel_members_user_id, channel_members.channel_id AS channel_members_channel_id, channel_members.`role` AS channel_members_role, channel_members.joined_at AS channel_members_joined_at 
+FROM channel_members 
+WHERE channel_members.user_id = %(user_id_1)s AND channel_members.channel_id = %(channel_id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:59,627 - sqlalchemy.engine.Engine - INFO - [cached since 450.3s ago] {'user_id_1': 8, 'channel_id_1': 10, 'param_1': 1}
+2025-06-27 05:28:59,631 - sqlalchemy.engine.Engine - INFO - SELECT messages.id AS messages_id, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.channel_id AS messages_channel_id, messages.user_id AS messages_user_id, messages.thread_id AS messages_thread_id, messages.edited AS messages_edited, messages.created_at AS messages_created_at, messages.updated_at AS messages_updated_at 
+FROM messages 
+WHERE messages.channel_id = %(channel_id_1)s ORDER BY messages.created_at DESC 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:28:59,631 - sqlalchemy.engine.Engine - INFO - [generated in 0.00027s] {'channel_id_1': 10, 'param_1': 0, 'param_2': 50}
+2025-06-27 05:28:59,633 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:59,634 - sqlalchemy.engine.Engine - INFO - [generated in 0.00031s] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:28:59,635 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:59,635 - sqlalchemy.engine.Engine - INFO - [cached since 0.002084s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:28:59,637 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:59,637 - sqlalchemy.engine.Engine - INFO - [cached since 0.003759s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:28:59,639 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:28:59,639 - sqlalchemy.engine.Engine - INFO - [cached since 0.005679s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:28:59,642 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:05,159 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:05,160 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:05,160 - sqlalchemy.engine.Engine - INFO - [cached since 584.6s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:29:05,172 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:05,174 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:05,175 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:05,175 - sqlalchemy.engine.Engine - INFO - [cached since 584.6s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:05,179 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:05,190 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:05,190 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:05,190 - sqlalchemy.engine.Engine - INFO - [cached since 584.6s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:05,208 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:05,209 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:05,209 - sqlalchemy.engine.Engine - INFO - [cached since 584.6s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:29:05,218 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:05,219 - sqlalchemy.engine.Engine - INFO - [cached since 584.6s ago] {'user_id_1': 8, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:05,227 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:05,238 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:05,239 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:05,239 - sqlalchemy.engine.Engine - INFO - [cached since 584.7s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:05,242 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:05,243 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:05,243 - sqlalchemy.engine.Engine - INFO - [cached since 584.7s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:05,255 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:05,267 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:05,268 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:05,269 - sqlalchemy.engine.Engine - INFO - [cached since 584.7s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:05,271 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:05,271 - sqlalchemy.engine.Engine - INFO - [cached since 584.7s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:05,276 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:05,285 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:05,286 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:05,287 - sqlalchemy.engine.Engine - INFO - [cached since 584.7s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:05,290 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:05,291 - sqlalchemy.engine.Engine - INFO - [cached since 584.7s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:05,295 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:05,303 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:05,303 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:05,303 - sqlalchemy.engine.Engine - INFO - [cached since 584.7s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:05,305 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:05,306 - sqlalchemy.engine.Engine - INFO - [cached since 584.7s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:05,308 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:05,575 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:05,576 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:05,576 - sqlalchemy.engine.Engine - INFO - [cached since 585s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:05,580 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:05,580 - sqlalchemy.engine.Engine - INFO - [cached since 585s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:05,583 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:05,587 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:05,587 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:05,588 - sqlalchemy.engine.Engine - INFO - [cached since 585s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:05,590 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:05,590 - sqlalchemy.engine.Engine - INFO - [cached since 585s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:05,593 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:05,596 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:05,596 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:05,596 - sqlalchemy.engine.Engine - INFO - [cached since 585s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:05,598 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:05,599 - sqlalchemy.engine.Engine - INFO - [cached since 585s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:05,608 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:05,612 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:05,612 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:05,612 - sqlalchemy.engine.Engine - INFO - [cached since 585s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:05,615 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:05,616 - sqlalchemy.engine.Engine - INFO - [cached since 585s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:05,620 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:07,895 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:07,895 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:07,896 - sqlalchemy.engine.Engine - INFO - [cached since 587.3s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:29:07,900 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels 
+WHERE channels.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:07,900 - sqlalchemy.engine.Engine - INFO - [cached since 458.6s ago] {'id_1': 10, 'param_1': 1}
+2025-06-27 05:29:07,902 - sqlalchemy.engine.Engine - INFO - SELECT channel_members.id AS channel_members_id, channel_members.user_id AS channel_members_user_id, channel_members.channel_id AS channel_members_channel_id, channel_members.`role` AS channel_members_role, channel_members.joined_at AS channel_members_joined_at 
+FROM channel_members 
+WHERE channel_members.user_id = %(user_id_1)s AND channel_members.channel_id = %(channel_id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:07,902 - sqlalchemy.engine.Engine - INFO - [cached since 458.6s ago] {'user_id_1': 8, 'channel_id_1': 10, 'param_1': 1}
+2025-06-27 05:29:07,904 - sqlalchemy.engine.Engine - INFO - SELECT messages.id AS messages_id, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.channel_id AS messages_channel_id, messages.user_id AS messages_user_id, messages.thread_id AS messages_thread_id, messages.edited AS messages_edited, messages.created_at AS messages_created_at, messages.updated_at AS messages_updated_at 
+FROM messages 
+WHERE messages.channel_id = %(channel_id_1)s ORDER BY messages.created_at DESC 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:07,904 - sqlalchemy.engine.Engine - INFO - [cached since 8.274s ago] {'channel_id_1': 10, 'param_1': 0, 'param_2': 50}
+2025-06-27 05:29:07,907 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:07,907 - sqlalchemy.engine.Engine - INFO - [cached since 8.274s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:29:07,909 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:07,909 - sqlalchemy.engine.Engine - INFO - [cached since 8.276s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:29:07,911 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:07,911 - sqlalchemy.engine.Engine - INFO - [cached since 8.277s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:29:07,912 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:07,912 - sqlalchemy.engine.Engine - INFO - [cached since 8.279s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:29:07,915 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:12,444 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:12,446 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:12,446 - sqlalchemy.engine.Engine - INFO - [cached since 591.9s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:29:12,450 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels 
+WHERE channels.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:12,451 - sqlalchemy.engine.Engine - INFO - [cached since 463.2s ago] {'id_1': 10, 'param_1': 1}
+2025-06-27 05:29:12,468 - sqlalchemy.engine.Engine - INFO - SELECT channel_members.id AS channel_members_id, channel_members.user_id AS channel_members_user_id, channel_members.channel_id AS channel_members_channel_id, channel_members.`role` AS channel_members_role, channel_members.joined_at AS channel_members_joined_at 
+FROM channel_members 
+WHERE channel_members.user_id = %(user_id_1)s AND channel_members.channel_id = %(channel_id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:12,469 - sqlalchemy.engine.Engine - INFO - [cached since 463.2s ago] {'user_id_1': 8, 'channel_id_1': 10, 'param_1': 1}
+2025-06-27 05:29:12,472 - app.routers.messages - INFO - Creating message: content=lllllllll, channel_id=10, user_id=8
+2025-06-27 05:29:12,490 - sqlalchemy.engine.Engine - INFO - INSERT INTO messages (content, message_type, channel_id, user_id, thread_id, edited, created_at, updated_at) VALUES (%(content)s, %(message_type)s, %(channel_id)s, %(user_id)s, %(thread_id)s, %(edited)s, now(), now())
+2025-06-27 05:29:12,490 - sqlalchemy.engine.Engine - INFO - [generated in 0.00086s] {'content': 'lllllllll', 'message_type': 'text', 'channel_id': 10, 'user_id': 8, 'thread_id': None, 'edited': 0}
+2025-06-27 05:29:12,495 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 05:29:12,530 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:12,533 - sqlalchemy.engine.Engine - INFO - SELECT messages.id, messages.content, messages.message_type, messages.channel_id, messages.user_id, messages.thread_id, messages.edited, messages.created_at, messages.updated_at 
+FROM messages 
+WHERE messages.id = %(pk_1)s
+2025-06-27 05:29:12,534 - sqlalchemy.engine.Engine - INFO - [generated in 0.00036s] {'pk_1': 37}
+2025-06-27 05:29:12,536 - app.routers.messages - INFO - Message created successfully with ID: 37
+2025-06-27 05:29:12,537 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:12,538 - sqlalchemy.engine.Engine - INFO - [cached since 12.9s ago] {'id_1': 8, 'param_1': 1}
+2025-06-27 05:29:12,543 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:12,552 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:12,553 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:12,553 - sqlalchemy.engine.Engine - INFO - [cached since 592s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:29:12,555 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels 
+WHERE channels.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:12,556 - sqlalchemy.engine.Engine - INFO - [cached since 463.3s ago] {'id_1': 10, 'param_1': 1}
+2025-06-27 05:29:12,560 - sqlalchemy.engine.Engine - INFO - SELECT channel_members.id AS channel_members_id, channel_members.user_id AS channel_members_user_id, channel_members.channel_id AS channel_members_channel_id, channel_members.`role` AS channel_members_role, channel_members.joined_at AS channel_members_joined_at 
+FROM channel_members 
+WHERE channel_members.user_id = %(user_id_1)s AND channel_members.channel_id = %(channel_id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:12,561 - sqlalchemy.engine.Engine - INFO - [cached since 463.3s ago] {'user_id_1': 8, 'channel_id_1': 10, 'param_1': 1}
+2025-06-27 05:29:12,564 - sqlalchemy.engine.Engine - INFO - SELECT messages.id AS messages_id, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.channel_id AS messages_channel_id, messages.user_id AS messages_user_id, messages.thread_id AS messages_thread_id, messages.edited AS messages_edited, messages.created_at AS messages_created_at, messages.updated_at AS messages_updated_at 
+FROM messages 
+WHERE messages.channel_id = %(channel_id_1)s ORDER BY messages.created_at DESC 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:12,564 - sqlalchemy.engine.Engine - INFO - [cached since 12.93s ago] {'channel_id_1': 10, 'param_1': 0, 'param_2': 50}
+2025-06-27 05:29:12,570 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:12,571 - sqlalchemy.engine.Engine - INFO - [cached since 12.94s ago] {'id_1': 8, 'param_1': 1}
+2025-06-27 05:29:12,574 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:12,574 - sqlalchemy.engine.Engine - INFO - [cached since 12.94s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:29:12,579 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:12,579 - sqlalchemy.engine.Engine - INFO - [cached since 12.95s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:29:12,582 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:12,583 - sqlalchemy.engine.Engine - INFO - [cached since 12.95s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:29:12,586 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:12,587 - sqlalchemy.engine.Engine - INFO - [cached since 12.95s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:29:12,591 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:18,887 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:18,887 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:18,888 - sqlalchemy.engine.Engine - INFO - [cached since 598.3s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:29:18,907 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:18,907 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:18,909 - sqlalchemy.engine.Engine - INFO - [cached since 598.3s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:18,918 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:18,928 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:18,934 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:18,936 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:18,936 - sqlalchemy.engine.Engine - INFO - [cached since 598.4s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:18,950 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:18,951 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:18,952 - sqlalchemy.engine.Engine - INFO - [cached since 598.4s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:29:18,957 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:18,958 - sqlalchemy.engine.Engine - INFO - [cached since 598.4s ago] {'user_id_1': 8, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:18,962 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:18,965 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:18,966 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:18,966 - sqlalchemy.engine.Engine - INFO - [cached since 598.4s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:18,969 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:18,969 - sqlalchemy.engine.Engine - INFO - [cached since 598.4s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:18,972 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:18,978 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:18,984 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:18,985 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:18,985 - sqlalchemy.engine.Engine - INFO - [cached since 598.4s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:18,987 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:18,988 - sqlalchemy.engine.Engine - INFO - [cached since 598.4s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:18,999 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:19,003 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:19,003 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:19,004 - sqlalchemy.engine.Engine - INFO - [cached since 598.4s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:19,007 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:19,007 - sqlalchemy.engine.Engine - INFO - [cached since 598.4s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:19,019 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:19,026 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:19,027 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:19,027 - sqlalchemy.engine.Engine - INFO - [cached since 598.5s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:19,030 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:19,030 - sqlalchemy.engine.Engine - INFO - [cached since 598.4s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:19,033 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:19,573 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:19,574 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:19,575 - sqlalchemy.engine.Engine - INFO - [cached since 599s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:19,579 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:19,579 - sqlalchemy.engine.Engine - INFO - [cached since 599s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:19,582 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:19,584 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:19,585 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:19,585 - sqlalchemy.engine.Engine - INFO - [cached since 599s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:19,587 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:19,588 - sqlalchemy.engine.Engine - INFO - [cached since 599s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:19,591 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:19,594 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:19,594 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:19,594 - sqlalchemy.engine.Engine - INFO - [cached since 599s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:19,596 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:19,596 - sqlalchemy.engine.Engine - INFO - [cached since 599s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:19,599 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:19,607 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:19,608 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:19,608 - sqlalchemy.engine.Engine - INFO - [cached since 599s ago] {'username_1': 'test', 'param_1': 1}
+2025-06-27 05:29:19,611 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels INNER JOIN channel_members ON channels.id = channel_members.channel_id 
+WHERE channel_members.user_id = %(user_id_1)s 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:19,611 - sqlalchemy.engine.Engine - INFO - [cached since 599s ago] {'user_id_1': 5, 'param_1': 0, 'param_2': 100}
+2025-06-27 05:29:19,615 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:22,024 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:22,025 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:22,025 - sqlalchemy.engine.Engine - INFO - [cached since 601.5s ago] {'username_1': 'test2', 'param_1': 1}
+2025-06-27 05:29:22,034 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels 
+WHERE channels.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:22,036 - sqlalchemy.engine.Engine - INFO - [cached since 472.8s ago] {'id_1': 10, 'param_1': 1}
+2025-06-27 05:29:22,040 - sqlalchemy.engine.Engine - INFO - SELECT channel_members.id AS channel_members_id, channel_members.user_id AS channel_members_user_id, channel_members.channel_id AS channel_members_channel_id, channel_members.`role` AS channel_members_role, channel_members.joined_at AS channel_members_joined_at 
+FROM channel_members 
+WHERE channel_members.user_id = %(user_id_1)s AND channel_members.channel_id = %(channel_id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:22,040 - sqlalchemy.engine.Engine - INFO - [cached since 472.8s ago] {'user_id_1': 8, 'channel_id_1': 10, 'param_1': 1}
+2025-06-27 05:29:22,042 - sqlalchemy.engine.Engine - INFO - SELECT messages.id AS messages_id, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.channel_id AS messages_channel_id, messages.user_id AS messages_user_id, messages.thread_id AS messages_thread_id, messages.edited AS messages_edited, messages.created_at AS messages_created_at, messages.updated_at AS messages_updated_at 
+FROM messages 
+WHERE messages.channel_id = %(channel_id_1)s ORDER BY messages.created_at DESC 
+ LIMIT %(param_1)s, %(param_2)s
+2025-06-27 05:29:22,043 - sqlalchemy.engine.Engine - INFO - [cached since 22.41s ago] {'channel_id_1': 10, 'param_1': 0, 'param_2': 50}
+2025-06-27 05:29:22,045 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:22,045 - sqlalchemy.engine.Engine - INFO - [cached since 22.41s ago] {'id_1': 8, 'param_1': 1}
+2025-06-27 05:29:22,047 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:22,047 - sqlalchemy.engine.Engine - INFO - [cached since 22.41s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:29:22,049 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:22,050 - sqlalchemy.engine.Engine - INFO - [cached since 22.42s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:29:22,053 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:22,054 - sqlalchemy.engine.Engine - INFO - [cached since 22.42s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:29:22,056 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:22,057 - sqlalchemy.engine.Engine - INFO - [cached since 22.42s ago] {'id_1': 5, 'param_1': 1}
+2025-06-27 05:29:22,060 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:29:59,995 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:29:59,996 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:29:59,996 - sqlalchemy.engine.Engine - INFO - [cached since 639.4s ago] {'username_1': 'indenttest', 'param_1': 1}
+2025-06-27 05:29:59,999 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-06-27 05:30:11,307 - watchfiles.main - INFO - 1 change detected
+2025-06-27 05:30:11,974 - watchfiles.main - INFO - 1 change detected
+2025-06-27 05:30:13,529 - sqlalchemy.engine.Engine - INFO - SELECT DATABASE()
+2025-06-27 05:30:13,530 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 05:30:13,530 - sqlalchemy.engine.Engine - INFO - SELECT @@sql_mode
+2025-06-27 05:30:13,531 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 05:30:13,531 - sqlalchemy.engine.Engine - INFO - SELECT @@lower_case_table_names
+2025-06-27 05:30:13,531 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 05:30:13,532 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:30:13,532 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channel_members`
+2025-06-27 05:30:13,532 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 05:30:13,534 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`users`
+2025-06-27 05:30:13,535 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 05:30:13,536 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`channels`
+2025-06-27 05:30:13,536 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 05:30:13,538 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`messages`
+2025-06-27 05:30:13,538 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 05:30:13,539 - sqlalchemy.engine.Engine - INFO - DESCRIBE `slack_clone`.`reactions`
+2025-06-27 05:30:13,539 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-06-27 05:30:13,541 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 05:30:13,570 - watchfiles.main - INFO - 3 changes detected
+2025-06-27 05:30:13,931 - watchfiles.main - INFO - 1 change detected
+2025-06-27 05:30:20,505 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:30:20,510 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:30:20,510 - sqlalchemy.engine.Engine - INFO - [generated in 0.00031s] {'username_1': 'indenttest', 'param_1': 1}
+2025-06-27 05:30:20,514 - sqlalchemy.engine.Engine - INFO - SELECT messages.id AS messages_id, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.channel_id AS messages_channel_id, messages.user_id AS messages_user_id, messages.thread_id AS messages_thread_id, messages.edited AS messages_edited, messages.created_at AS messages_created_at, messages.updated_at AS messages_updated_at 
+FROM messages 
+WHERE messages.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:30:20,515 - sqlalchemy.engine.Engine - INFO - [generated in 0.00035s] {'id_1': 1, 'param_1': 1}
+2025-06-27 05:30:20,518 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels 
+WHERE channels.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:30:20,518 - sqlalchemy.engine.Engine - INFO - [generated in 0.00040s] {'id_1': 1, 'param_1': 1}
+2025-06-27 05:30:20,526 - sqlalchemy.engine.Engine - INFO - SELECT channel_members.id AS channel_members_id, channel_members.user_id AS channel_members_user_id, channel_members.channel_id AS channel_members_channel_id, channel_members.`role` AS channel_members_role, channel_members.joined_at AS channel_members_joined_at 
+FROM channel_members 
+WHERE channel_members.user_id = %(user_id_1)s AND channel_members.channel_id = %(channel_id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:30:20,526 - sqlalchemy.engine.Engine - INFO - [generated in 0.00057s] {'user_id_1': 9, 'channel_id_1': 1, 'param_1': 1}
+2025-06-27 05:30:20,532 - sqlalchemy.engine.Engine - INFO - SELECT reactions.id AS reactions_id, reactions.message_id AS reactions_message_id, reactions.user_id AS reactions_user_id, reactions.emoji AS reactions_emoji, reactions.created_at AS reactions_created_at 
+FROM reactions 
+WHERE reactions.message_id = %(message_id_1)s AND reactions.user_id = %(user_id_1)s AND reactions.emoji = %(emoji_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:30:20,532 - sqlalchemy.engine.Engine - INFO - [generated in 0.00077s] {'message_id_1': 1, 'user_id_1': 9, 'emoji_1': '👍', 'param_1': 1}
+2025-06-27 05:30:20,539 - sqlalchemy.engine.Engine - INFO - INSERT INTO reactions (message_id, user_id, emoji, created_at) VALUES (%(message_id)s, %(user_id)s, %(emoji)s, now())
+2025-06-27 05:30:20,539 - sqlalchemy.engine.Engine - INFO - [generated in 0.00025s] {'message_id': 1, 'user_id': 9, 'emoji': '👍'}
+2025-06-27 05:30:20,542 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-06-27 05:30:29,692 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-06-27 05:30:29,692 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.email AS users_email, users.username AS users_username, users.display_name AS users_display_name, users.password_hash AS users_password_hash, users.avatar_url AS users_avatar_url, users.status AS users_status, users.is_online AS users_is_online, users.last_seen AS users_last_seen, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:30:29,692 - sqlalchemy.engine.Engine - INFO - [cached since 9.183s ago] {'username_1': 'indenttest', 'param_1': 1}
+2025-06-27 05:30:29,694 - sqlalchemy.engine.Engine - INFO - SELECT messages.id AS messages_id, messages.content AS messages_content, messages.message_type AS messages_message_type, messages.channel_id AS messages_channel_id, messages.user_id AS messages_user_id, messages.thread_id AS messages_thread_id, messages.edited AS messages_edited, messages.created_at AS messages_created_at, messages.updated_at AS messages_updated_at 
+FROM messages 
+WHERE messages.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:30:29,695 - sqlalchemy.engine.Engine - INFO - [cached since 9.18s ago] {'id_1': 1, 'param_1': 1}
+2025-06-27 05:30:29,696 - sqlalchemy.engine.Engine - INFO - SELECT channels.id AS channels_id, channels.name AS channels_name, channels.description AS channels_description, channels.channel_type AS channels_channel_type, channels.is_archived AS channels_is_archived, channels.created_by AS channels_created_by, channels.created_at AS channels_created_at, channels.updated_at AS channels_updated_at 
+FROM channels 
+WHERE channels.id = %(id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:30:29,696 - sqlalchemy.engine.Engine - INFO - [cached since 9.179s ago] {'id_1': 1, 'param_1': 1}
+2025-06-27 05:30:29,698 - sqlalchemy.engine.Engine - INFO - SELECT channel_members.id AS channel_members_id, channel_members.user_id AS channel_members_user_id, channel_members.channel_id AS channel_members_channel_id, channel_members.`role` AS channel_members_role, channel_members.joined_at AS channel_members_joined_at 
+FROM channel_members 
+WHERE channel_members.user_id = %(user_id_1)s AND channel_members.channel_id = %(channel_id_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:30:29,699 - sqlalchemy.engine.Engine - INFO - [cached since 9.173s ago] {'user_id_1': 9, 'channel_id_1': 1, 'param_1': 1}
+2025-06-27 05:30:29,700 - sqlalchemy.engine.Engine - INFO - SELECT reactions.id AS reactions_id, reactions.message_id AS reactions_message_id, reactions.user_id AS reactions_user_id, reactions.emoji AS reactions_emoji, reactions.created_at AS reactions_created_at 
+FROM reactions 
+WHERE reactions.message_id = %(message_id_1)s AND reactions.user_id = %(user_id_1)s AND reactions.emoji = %(emoji_1)s 
+ LIMIT %(param_1)s
+2025-06-27 05:30:29,700 - sqlalchemy.engine.Engine - INFO - [cached since 9.169s ago] {'message_id_1': 1, 'user_id_1': 9, 'emoji_1': '👍', 'param_1': 1}
+2025-06-27 05:30:29,703 - sqlalchemy.engine.Engine - INFO - DELETE FROM reactions WHERE reactions.id = %(id)s
+2025-06-27 05:30:29,704 - sqlalchemy.engine.Engine - INFO - [generated in 0.00029s] {'id': 1}
+2025-06-27 05:30:29,709 - sqlalchemy.engine.Engine - INFO - COMMIT

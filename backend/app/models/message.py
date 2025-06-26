@@ -41,7 +41,6 @@ class MessageUpdate(BaseModel):
     content: Optional[str] = None
 
 class ReactionBase(BaseModel):
-    message_id: int
     emoji: str
 
 class ReactionCreate(ReactionBase):

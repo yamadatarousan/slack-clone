@@ -114,7 +114,7 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
             <div className="text-gray-500">メッセージを読み込み中...</div>
           </div>
         ) : (
-          <MessageList messages={messages} currentUser={user} />
+          <MessageList messages={messages} currentUser={user} onReactionAdded={loadMessages} />
         )}
         <div ref={messagesEndRef} />
       </div>

@@ -4,9 +4,10 @@ import MessageItem from './MessageItem';
 interface MessageListProps {
   messages: Message[];
   currentUser: User | null;
+  onReactionAdded?: () => void;
 }
 
-export default function MessageList({ messages, currentUser }: MessageListProps) {
+export default function MessageList({ messages, currentUser, onReactionAdded }: MessageListProps) {
   if (messages.length === 0) {
     return (
       <div className="h-full flex items-center justify-center text-gray-500">
@@ -32,6 +33,7 @@ export default function MessageList({ messages, currentUser }: MessageListProps)
             message={message}
             showHeader={showHeader}
             isOwn={currentUser?.id === message.user_id}
+            onReactionAdded={onReactionAdded}
           />
         );
       })}
