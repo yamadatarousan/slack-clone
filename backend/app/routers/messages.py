@@ -1,11 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
+import logging
 
 from app.database.base import get_db
 from app.database.models import Message, Channel, User, channel_members, Reaction
 from app.models.message import MessageCreate, MessageResponse, MessageUpdate, ReactionCreate
 from app.routers.auth import get_current_user
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -27,22 +30,28 @@ def create_message(
         channel_members.c.channel_id == message.channel_id
     ).first()
     
-    if not member and channel.is_private:
+    if not member and channel.channel_type == 'private':
         raise HTTPException(status_code=403, detail="Access denied")
     
     # Create message
-    db_message = Message(
-        content=message.content,
-        message_type=message.message_type or "text",
-        channel_id=message.channel_id,
-        user_id=current_user.id,
-        thread_id=message.parent_message_id
-    )
-    db.add(db_message)
-    db.commit()
-    db.refresh(db_message)
-    
-    return db_message
+    try:
+        logger.info(f"Creating message: content={message.content}, channel_id={message.channel_id}, user_id={current_user.id}")
+        db_message = Message(
+            content=message.content,
+            message_type=message.message_type or "text",
+            channel_id=message.channel_id,
+            user_id=current_user.id,
+            thread_id=message.parent_message_id
+        )
+        db.add(db_message)
+        db.commit()
+        db.refresh(db_message)
+        logger.info(f"Message created successfully with ID: {db_message.id}")
+        return db_message
+    except Exception as e:
+        logger.error(f"Error creating message: {str(e)}", exc_info=True)
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to create message: {str(e)}")
 
 
 @router.get("/channel/{channel_id}", response_model=List[MessageResponse])
@@ -64,13 +73,12 @@ def get_channel_messages(
         channel_members.c.channel_id == channel_id
     ).first()
     
-    if not member and channel.is_private:
+    if not member and channel.channel_type == 'private':
         raise HTTPException(status_code=403, detail="Access denied")
     
     # Get messages
     messages = db.query(Message).filter(
-        Message.channel_id == channel_id,
-        Message.deleted == False
+        Message.channel_id == channel_id
     ).order_by(Message.created_at.desc()).offset(skip).limit(limit).all()
     
     return messages[::-1]  # Return in chronological order
@@ -93,7 +101,7 @@ def get_message(
         channel_members.c.channel_id == message.channel_id
     ).first()
     
-    if not member and channel.is_private:
+    if not member and channel.channel_type == 'private':
         raise HTTPException(status_code=403, detail="Access denied")
     
     return message
@@ -145,9 +153,8 @@ def delete_message(
     if not is_sender and not is_admin:
         raise HTTPException(status_code=403, detail="Access denied")
     
-    # Soft delete
-    message.deleted = True
-    message.content = "[Deleted message]"
+    # Delete message (hard delete since no deleted column)
+    db.delete(message)
     db.commit()
     
     return {"message": "Message deleted successfully"}
@@ -172,7 +179,7 @@ def add_reaction(
         channel_members.c.channel_id == message.channel_id
     ).first()
     
-    if not member and channel.is_private:
+    if not member and channel.channel_type == 'private':
         raise HTTPException(status_code=403, detail="Access denied")
     
     # Check if reaction already exists
@@ -219,13 +226,12 @@ def get_message_thread(
         channel_members.c.channel_id == parent_message.channel_id
     ).first()
     
-    if not member and channel.is_private:
+    if not member and channel.channel_type == 'private':
         raise HTTPException(status_code=403, detail="Access denied")
     
     # Get thread messages
     thread_messages = db.query(Message).filter(
-        Message.thread_id == message_id,
-        Message.edited == False
+        Message.thread_id == message_id
     ).order_by(Message.created_at.asc()).offset(skip).limit(limit).all()
     
     return thread_messages

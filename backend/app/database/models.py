@@ -62,7 +62,6 @@ class Message(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)  # sender
     thread_id = Column(Integer, ForeignKey("messages.id"), nullable=True)  # For threading
     edited = Column(Boolean, default=False)
-    deleted = Column(Boolean, default=False)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 

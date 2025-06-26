@@ -17,7 +17,8 @@
       "Bash(kill:*)",
       "Bash(mkdir:*)",
       "Bash(mysql:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

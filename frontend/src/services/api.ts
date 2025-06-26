@@ -125,3 +125,21 @@ class ApiService {
 }
 
 export const apiService = new ApiService();
+
+// Export individual functions for convenience
+export const { 
+  login, 
+  register, 
+  getMe, 
+  getChannels, 
+  getChannel, 
+  createChannel, 
+  joinChannel, 
+  leaveChannel,
+  getChannelMessages,
+  sendMessage,
+  updateMessage,
+  deleteMessage,
+  addReaction,
+  healthCheck
+} = apiService;

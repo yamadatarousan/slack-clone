@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Channel } from '../types';
 import { apiService } from '../services/api';
+import { CreateChannelModal } from './CreateChannelModal';
 
 interface SidebarProps {
   selectedChannelId?: number;
@@ -10,6 +11,7 @@ interface SidebarProps {
 export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarProps) {
   const [channels, setChannels] = useState<Channel[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     loadChannels();
@@ -47,7 +49,7 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
           <div className="mb-4">
             <h3 className="text-sm font-medium text-gray-300 mb-2 px-2">チャンネル</h3>
             <div className="space-y-1">
-              {channels.filter(c => !c.is_private && !c.is_direct_message).map((channel) => (
+              {channels.filter(c => c.channel_type === 'public').map((channel) => (
                 <button
                   key={channel.id}
                   onClick={() => onChannelSelect?.(channel)}
@@ -63,11 +65,11 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
             </div>
           </div>
           
-          {channels.some(c => c.is_private) && (
+          {channels.some(c => c.channel_type === 'private') && (
             <div className="mb-4">
               <h3 className="text-sm font-medium text-gray-300 mb-2 px-2">プライベートチャンネル</h3>
               <div className="space-y-1">
-                {channels.filter(c => c.is_private && !c.is_direct_message).map((channel) => (
+                {channels.filter(c => c.channel_type === 'private').map((channel) => (
                   <button
                     key={channel.id}
                     onClick={() => onChannelSelect?.(channel)}
@@ -84,11 +86,11 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
             </div>
           )}
           
-          {channels.some(c => c.is_direct_message) && (
+          {channels.some(c => c.channel_type === 'dm') && (
             <div className="mb-4">
               <h3 className="text-sm font-medium text-gray-300 mb-2 px-2">ダイレクトメッセージ</h3>
               <div className="space-y-1">
-                {channels.filter(c => c.is_direct_message).map((channel) => (
+                {channels.filter(c => c.channel_type === 'dm').map((channel) => (
                   <button
                     key={channel.id}
                     onClick={() => onChannelSelect?.(channel)}
@@ -109,10 +111,19 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
       
       {/* Add channel button */}
       <div className="p-4 border-t border-gray-700">
-        <button className="w-full text-left text-gray-300 hover:text-white text-sm transition-colors">
+        <button 
+          onClick={() => setShowCreateModal(true)}
+          className="w-full text-left text-gray-300 hover:text-white text-sm transition-colors"
+        >
           + チャンネルを追加
         </button>
       </div>
+
+      <CreateChannelModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onChannelCreated={loadChannels}
+      />
     </div>
   );
 }

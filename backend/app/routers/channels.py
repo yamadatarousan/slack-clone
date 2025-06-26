@@ -28,7 +28,7 @@ def create_channel(
     db_channel = Channel(
         name=channel.name,
         description=channel.description,
-        is_private=channel.is_private,
+        channel_type='private' if channel.is_private else 'public',
         created_by=current_user.id
     )
     db.add(db_channel)
@@ -40,7 +40,7 @@ def create_channel(
         channel_members.insert().values(
             user_id=current_user.id,
             channel_id=db_channel.id,
-            is_admin=True
+            role='owner'
         )
     )
     db.commit()
@@ -79,7 +79,7 @@ def get_channel(
         channel_members.c.channel_id == channel_id
     ).first()
     
-    if not member and channel.is_private:
+    if not member and channel.channel_type == 'private':
         raise HTTPException(status_code=403, detail="Access denied")
     
     return channel

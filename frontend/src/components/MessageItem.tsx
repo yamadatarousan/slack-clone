@@ -18,7 +18,7 @@ export default function MessageItem({ message, showHeader, isOwn }: MessageItemP
     if (message.sender) {
       return message.sender.display_name || message.sender.username;
     }
-    return `User ${message.sender_id}`;
+    return `User ${message.user_id || message.sender_id}`;
   };
 
   const getAvatarInitial = () => {
@@ -43,7 +43,7 @@ export default function MessageItem({ message, showHeader, isOwn }: MessageItemP
               <span className="text-xs text-gray-500">
                 {formatTime(message.created_at)}
               </span>
-              {message.is_edited && (
+              {(message.edited || message.is_edited) && (
                 <span className="text-xs text-gray-400">(編集済み)</span>
               )}
             </div>
