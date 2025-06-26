@@ -45,8 +45,10 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
       // Listen for new messages
       const unsubscribe = websocketService.onMessage((message) => {
         if (message.type === 'message' && message.channel_id === channel.id.toString()) {
-          // Reload messages from server to get proper formatting and sender info
-          loadMessages();
+          // Only reload if the message is from another user to avoid duplicate reloads
+          if (message.user_id !== user.id.toString()) {
+            loadMessages();
+          }
         }
       });
 
@@ -59,7 +61,9 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
   const loadMessages = async () => {
     try {
       setLoading(true);
+      console.log(`Loading messages for channel ${channel.id}`);
       const messagesData = await apiService.getChannelMessages(channel.id);
+      console.log(`Loaded ${messagesData.length} messages`);
       setMessages(messagesData);
     } catch (error) {
       console.error('Failed to load messages:', error);
@@ -72,19 +76,32 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
     if (!user) return;
 
     try {
+      console.log(`Sending message: "${content}" to channel ${channel.id}`);
       // Send via REST API for persistence
-      await apiService.sendMessage({
+      const sentMessage = await apiService.sendMessage({
         content,
         channel_id: channel.id,
       });
+      console.log('Message sent successfully:', sentMessage);
 
-      // Also send via WebSocket for real-time
-      websocketService.sendChatMessage(content, channel.id.toString());
+      // Always reload messages after successful send to ensure display
+      await loadMessages();
       
-      // Messages will be reloaded via WebSocket message handler
+      // Scroll to bottom to show new message
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+
+      // Also send via WebSocket for real-time to other users
+      try {
+        websocketService.sendChatMessage(content, channel.id.toString());
+      } catch (wsError) {
+        console.warn('WebSocket send failed, but message was saved:', wsError);
+      }
+      
     } catch (error) {
       console.error('Failed to send message:', error);
-      // On error, reload messages to ensure consistency
+      // On error, also try to reload messages
       await loadMessages();
     }
   };
