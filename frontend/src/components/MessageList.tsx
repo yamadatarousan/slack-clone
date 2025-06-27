@@ -10,7 +10,7 @@ interface MessageListProps {
 export default function MessageList({ messages, currentUser, onReactionAdded }: MessageListProps) {
   if (messages.length === 0) {
     return (
-      <div className="h-full flex items-center justify-center text-gray-500">
+      <div className="h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
         <div className="text-center">
           <p className="text-lg">このチャンネルにはまだメッセージがありません</p>
           <p className="text-sm mt-1">最初のメッセージを送信してみましょう！</p>

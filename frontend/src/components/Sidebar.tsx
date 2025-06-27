@@ -4,6 +4,7 @@ import { apiService } from '../services/api';
 import { CreateChannelModal } from './CreateChannelModal';
 import { ChannelBrowser } from './ChannelBrowser';
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface SidebarProps {
   selectedChannelId?: number;
@@ -12,6 +13,7 @@ interface SidebarProps {
 
 export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarProps) {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [channels, setChannels] = useState<Channel[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -86,8 +88,17 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
   return (
     <div className="h-full flex flex-col">
       {/* Workspace header */}
-      <div className="p-4 border-b border-gray-700">
-        <h2 className="text-lg font-semibold text-white">Slack Clone</h2>
+      <div className="p-4 border-b border-gray-700 dark:border-gray-600">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-white">Slack Clone</h2>
+          <button
+            onClick={toggleTheme}
+            className="p-1 rounded text-gray-300 hover:text-white transition-colors"
+            title={theme === 'light' ? 'ダークモードに切り替え' : 'ライトモードに切り替え'}
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+        </div>
         {user && (
           <div className="mt-3 relative">
             <button
@@ -113,32 +124,32 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
             </button>
             
             {showStatusMenu && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg py-1 z-10">
                 <button
                   onClick={() => handleStatusChange('active')}
-                  className="w-full px-3 py-2 text-left text-sm text-gray-900 hover:bg-gray-100 flex items-center space-x-2"
+                  className="w-full px-3 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center space-x-2"
                 >
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                   <span>アクティブ</span>
                 </button>
                 <button
                   onClick={() => handleStatusChange('away')}
-                  className="w-full px-3 py-2 text-left text-sm text-gray-900 hover:bg-gray-100 flex items-center space-x-2"
+                  className="w-full px-3 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center space-x-2"
                 >
                   <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
                   <span>離席中</span>
                 </button>
                 <button
                   onClick={() => handleStatusChange('busy')}
-                  className="w-full px-3 py-2 text-left text-sm text-gray-900 hover:bg-gray-100 flex items-center space-x-2"
+                  className="w-full px-3 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center space-x-2"
                 >
                   <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                   <span>取り込み中</span>
                 </button>
-                <hr className="border-gray-300" />
+                <hr className="border-gray-300 dark:border-gray-600" />
                 <button
                   onClick={logout}
-                  className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center space-x-2 text-red-600"
+                  className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center space-x-2 text-red-600 dark:text-red-400"
                 >
                   <span>ログアウト</span>
                 </button>

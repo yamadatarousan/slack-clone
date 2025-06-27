@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Message } from '../types';
 import { apiService } from '../services/api';
+import ThreadView from './ThreadView';
+import EmojiPicker from './EmojiPicker';
+import FileMessage from './FileMessage';
 
 interface MessageItemProps {
   message: Message;
@@ -11,6 +14,8 @@ interface MessageItemProps {
 
 export default function MessageItem({ message, showHeader, isOwn, onReactionAdded }: MessageItemProps) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showThread, setShowThread] = useState(false);
+  const emojiButtonRef = useRef<HTMLButtonElement>(null);
   const formatTime = (timestamp: string) => {
     return new Date(timestamp).toLocaleTimeString('ja-JP', {
       hour: '2-digit',
@@ -40,7 +45,17 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
     setShowEmojiPicker(false);
   };
 
-  const popularEmojis = ['👍', '👎', '😀', '😢', '😮', '❤️', '🎉', '🚀'];
+  const getEmojiPickerPosition = () => {
+    if (emojiButtonRef.current) {
+      const rect = emojiButtonRef.current.getBoundingClientRect();
+      return {
+        top: rect.bottom + 5,
+        left: rect.left,
+      };
+    }
+    return { top: 0, left: 0 };
+  };
+
 
   const getStatusColor = (sender: any) => {
     if (!sender || !sender.is_online) return 'bg-gray-400';
@@ -50,6 +65,41 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
       case 'busy': return 'bg-red-400';
       default: return 'bg-gray-400';
     }
+  };
+
+  const parseFileMessage = (content: string) => {
+    // Check if message is a file message format: "📎 filename\nfileUrl"
+    // Accept both absolute URLs and relative paths
+    const fileMessageRegex = /^📎\s+(.+)\n(.+)$/;
+    const match = content.match(fileMessageRegex);
+    
+    // Debug: Log the content to see what we're parsing
+    if (content.includes('📎')) {
+      console.log('Parsing potential file message:', content);
+      console.log('Regex match:', match);
+    }
+    
+    if (match) {
+      let fileUrl = match[2].trim();
+      
+      // If it's a relative path, make it absolute
+      if (fileUrl.startsWith('/')) {
+        fileUrl = `http://localhost:8000${fileUrl}`;
+      }
+      
+      console.log('Parsed file message:', { fileName: match[1].trim(), fileUrl });
+      
+      return {
+        isFile: true,
+        fileName: match[1].trim(),
+        fileUrl: fileUrl
+      };
+    }
+    
+    return {
+      isFile: false,
+      content
+    };
   };
 
   return (
@@ -68,7 +118,7 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-baseline space-x-2">
-              <span className="font-medium text-gray-900">
+              <span className="font-medium text-gray-900 dark:text-gray-100">
                 {getDisplayName()}
               </span>
               <span className="text-xs text-gray-500">
@@ -79,39 +129,50 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
               )}
             </div>
             <div className="mt-1 relative">
-              <p className="text-gray-900 whitespace-pre-wrap break-words">
-                {message.content}
-              </p>
+              {(() => {
+                const parsedMessage = parseFileMessage(message.content);
+                if (parsedMessage.isFile) {
+                  return (
+                    <FileMessage
+                      fileName={parsedMessage.fileName!}
+                      fileUrl={parsedMessage.fileUrl!}
+                    />
+                  );
+                }
+                return (
+                  <p className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words">
+                    {message.content}
+                  </p>
+                );
+              })()}
               
               {/* Hover actions */}
               <div className="absolute -top-2 right-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="flex space-x-1 bg-white border border-gray-200 rounded shadow-lg p-1">
+                <div className="flex space-x-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded shadow-lg p-1">
                   <button
+                    ref={emojiButtonRef}
                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                    className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded"
+                    className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
                     title="リアクションを追加"
                   >
                     😊
                   </button>
+                  <button
+                    onClick={() => setShowThread(true)}
+                    className="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
+                    title="スレッドで返信"
+                  >
+                    💬
+                  </button>
                 </div>
               </div>
               
-              {/* Emoji picker */}
-              {showEmojiPicker && (
-                <div className="absolute top-6 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-10">
-                  <div className="grid grid-cols-4 gap-1">
-                    {popularEmojis.map((emoji) => (
-                      <button
-                        key={emoji}
-                        onClick={() => handleAddReaction(emoji)}
-                        className="p-2 text-lg hover:bg-gray-100 rounded transition-colors"
-                      >
-                        {emoji}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <EmojiPicker
+                isOpen={showEmojiPicker}
+                onClose={() => setShowEmojiPicker(false)}
+                onEmojiSelect={handleAddReaction}
+                position={getEmojiPickerPosition()}
+              />
             </div>
           </div>
         </div>
@@ -123,39 +184,49 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
             </span>
           </div>
           <div className="flex-1 min-w-0 relative">
-            <p className="text-gray-900 whitespace-pre-wrap break-words">
-              {message.content}
-            </p>
+            {(() => {
+              const parsedMessage = parseFileMessage(message.content);
+              if (parsedMessage.isFile) {
+                return (
+                  <FileMessage
+                    fileName={parsedMessage.fileName!}
+                    fileUrl={parsedMessage.fileUrl!}
+                  />
+                );
+              }
+              return (
+                <p className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words">
+                  {message.content}
+                </p>
+              );
+            })()}
             
             {/* Hover actions */}
             <div className="absolute -top-2 right-0 opacity-0 group-hover:opacity-100 transition-opacity">
-              <div className="flex space-x-1 bg-white border border-gray-200 rounded shadow-lg p-1">
+              <div className="flex space-x-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded shadow-lg p-1">
                 <button
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                  className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded"
+                  className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
                   title="リアクションを追加"
                 >
                   😊
                 </button>
+                <button
+                  onClick={() => setShowThread(true)}
+                  className="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
+                  title="スレッドで返信"
+                >
+                  💬
+                </button>
               </div>
             </div>
             
-            {/* Emoji picker */}
-            {showEmojiPicker && (
-              <div className="absolute top-6 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-10">
-                <div className="grid grid-cols-4 gap-1">
-                  {popularEmojis.map((emoji) => (
-                    <button
-                      key={emoji}
-                      onClick={() => handleAddReaction(emoji)}
-                      className="p-2 text-lg hover:bg-gray-100 rounded transition-colors"
-                    >
-                      {emoji}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+            <EmojiPicker
+              isOpen={showEmojiPicker}
+              onClose={() => setShowEmojiPicker(false)}
+              onEmojiSelect={handleAddReaction}
+              position={getEmojiPickerPosition()}
+            />
           </div>
         </div>
       )}
@@ -187,6 +258,13 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
           })()}
         </div>
       )}
+      
+      <ThreadView
+        isOpen={showThread}
+        onClose={() => setShowThread(false)}
+        parentMessage={message}
+        onReplyAdded={onReactionAdded}
+      />
     </div>
   );
 }

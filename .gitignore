@@ -1,0 +1,163 @@
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~.nib
+
+# Uploads and user-generated content
+uploads/
+media/
+static/media/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.coverage
+.pytest_cache/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+database.db
+slack_clone.db
+
+# Frontend/Node.js
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.nuxt/
+frontend/.next/
+frontend/.cache/
+frontend/coverage/
+frontend/.nyc_output/
+frontend/.grunt/
+frontend/bower_components/
+frontend/.lock-wscript
+frontend/logs/
+frontend/*.tgz
+frontend/.npm
+frontend/.eslintcache
+frontend/.rpt2_cache/
+frontend/.rts2_cache_cjs/
+frontend/.rts2_cache_es/
+frontend/.rts2_cache_umd/
+frontend/.node_repl_history
+frontend/*.tsbuildinfo
+frontend/.size-snapshot.json
+frontend/.pnp.*
+
+# Testing
+test-results/
+playwright-report/
+test-results.xml
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Docker
+.dockerignore
+
+# Mobile development
+mobile/node_modules/
+mobile/dist/
+mobile/build/
+mobile/.expo/
+mobile/.expo-shared/
+mobile/android/
+mobile/ios/
+
+# Certificates
+*.pem
+
+# Debug files
+debug.log
+error.log
+server.log
+
+# Temporary HTML test files
+test_*.html
+clear_storage.html

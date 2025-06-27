@@ -5,7 +5,7 @@ import json
 import asyncio
 import logging
 
-from app.routers import auth, channels, messages
+from app.routers import auth, channels, messages, files, search
 from app.database.base import engine
 from app.database.models import Base
 
@@ -38,6 +38,8 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/auth", tags=["authentication"])
 app.include_router(channels.router, prefix="/channels", tags=["channels"])
 app.include_router(messages.router, prefix="/messages", tags=["messages"])
+app.include_router(files.router, prefix="/files", tags=["files"])
+app.include_router(search.router, prefix="/search", tags=["search"])
 
 # WebSocket接続管理
 class ConnectionManager:

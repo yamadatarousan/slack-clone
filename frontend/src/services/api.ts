@@ -38,21 +38,35 @@ class ApiService {
 
   // Auth
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    console.log('API: Attempting login request to', `${API_BASE_URL}/auth/token`);
     const formData = new FormData();
     formData.append('username', credentials.username);
     formData.append('password', credentials.password);
     
-    const response: AxiosResponse<AuthResponse> = await this.api.post('/auth/token', formData, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
-    return response.data;
+    try {
+      const response: AxiosResponse<AuthResponse> = await this.api.post('/auth/token', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+      console.log('API: Login successful');
+      return response.data;
+    } catch (error) {
+      console.error('API: Login request failed', error);
+      throw error;
+    }
   }
 
   async register(data: RegisterData): Promise<User> {
-    const response: AxiosResponse<User> = await this.api.post('/auth/register', data);
-    return response.data;
+    console.log('API: Attempting registration request to', `${API_BASE_URL}/auth/register`);
+    try {
+      const response: AxiosResponse<User> = await this.api.post('/auth/register', data);
+      console.log('API: Registration successful');
+      return response.data;
+    } catch (error) {
+      console.error('API: Registration request failed', error);
+      throw error;
+    }
   }
 
   async getMe(): Promise<User> {
@@ -124,6 +138,32 @@ class ApiService {
     return response.data;
   }
 
+  async uploadFile(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response: AxiosResponse<{ file_url: string }> = await this.api.post('/files/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data.file_url;
+  }
+
+  async searchMessages(query: string, channelId?: number | null): Promise<Message[]> {
+    let url = `/search/messages?q=${encodeURIComponent(query)}`;
+    if (channelId) {
+      url += `&channel_id=${channelId}`;
+    }
+    const response: AxiosResponse<Message[]> = await this.api.get(url);
+    return response.data;
+  }
+
+  async getMessageThread(messageId: number): Promise<Message[]> {
+    const response: AxiosResponse<Message[]> = await this.api.get(`/messages/${messageId}/thread`);
+    return response.data;
+  }
+
   // Health check
   async healthCheck(): Promise<{ status: string }> {
     const response: AxiosResponse<{ status: string }> = await this.api.get('/health');
@@ -147,4 +187,7 @@ export const sendMessage = (data: { content: string; channel_id: number; parent_
 export const updateMessage = (id: number, data: { content: string }) => apiService.updateMessage(id, data);
 export const deleteMessage = (id: number) => apiService.deleteMessage(id);
 export const addReaction = (messageId: number, emoji: string) => apiService.addReaction(messageId, emoji);
+export const uploadFile = (file: File) => apiService.uploadFile(file);
+export const searchMessages = (query: string, channelId?: number | null) => apiService.searchMessages(query, channelId);
+export const getMessageThread = (messageId: number) => apiService.getMessageThread(messageId);
 export const healthCheck = () => apiService.healthCheck();

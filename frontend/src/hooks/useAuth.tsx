@@ -24,6 +24,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    console.log('Auth effect: token exists?', !!token);
     if (token) {
       loadUser();
     } else {
@@ -33,12 +34,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const loadUser = async () => {
     try {
-      const userData = await apiService.getMe();
+      console.log('Loading user...');
+      
+      // Add timeout to prevent infinite loading
+      const timeout = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      );
+      
+      // First check if API is accessible
+      try {
+        const healthCheck = await Promise.race([
+          apiService.healthCheck(),
+          timeout
+        ]);
+        console.log('Health check:', healthCheck);
+      } catch (healthError) {
+        console.error('Health check failed:', healthError);
+        throw new Error('API server is not accessible');
+      }
+      
+      const userData = await Promise.race([
+        apiService.getMe(),
+        timeout
+      ]);
+      console.log('User loaded:', userData);
       setUser(userData);
     } catch (error) {
       console.error('Failed to load user:', error);
       localStorage.removeItem('token');
     } finally {
+      console.log('Setting loading to false');
       setLoading(false);
     }
   };
@@ -48,12 +73,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setError(null);
       setLoading(true);
       
+      console.log('Attempting login with:', credentials);
       const response = await apiService.login(credentials);
+      console.log('Login response:', response);
       localStorage.setItem('token', response.access_token);
       
       await loadUser();
     } catch (error: any) {
-      const message = error.response?.data?.detail || 'Login failed';
+      console.error('Login error:', error);
+      console.error('Error response:', error.response);
+      const message = error.response?.data?.detail || error.message || 'Login failed';
       setError(message);
       throw new Error(message);
     } finally {
@@ -66,12 +95,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setError(null);
       setLoading(true);
       
+      console.log('Attempting registration with:', { ...data, password: '[HIDDEN]' });
       await apiService.register(data);
+      console.log('Registration successful');
       
       // Auto-login after registration
       await login({ username: data.username, password: data.password });
     } catch (error: any) {
-      const message = error.response?.data?.detail || 'Registration failed';
+      console.error('Registration error:', error);
+      console.error('Error response:', error.response);
+      const message = error.response?.data?.detail || error.message || 'Registration failed';
       setError(message);
       throw new Error(message);
     } finally {

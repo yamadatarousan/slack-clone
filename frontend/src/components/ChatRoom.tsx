@@ -3,6 +3,7 @@ import { Channel, Message } from '../types';
 import { apiService } from '../services/api';
 import { websocketService } from '../services/websocket';
 import { useAuth } from '../hooks/useAuth';
+import { useNotifications } from '../contexts/NotificationContext';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 
@@ -12,8 +13,10 @@ interface ChatRoomProps {
 
 export default function ChatRoom({ channel }: ChatRoomProps) {
   const { user } = useAuth();
+  const { addNotification, showBrowserNotification } = useNotifications();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,6 +51,48 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
           // Only reload if the message is from another user to avoid duplicate reloads
           if (message.user_id !== user.id.toString()) {
             loadMessages();
+            
+            // Show notification for new messages
+            const isWindowFocused = document.hasFocus();
+            const senderName = message.sender_name || `ユーザー${message.user_id}`;
+            
+            if (!isWindowFocused) {
+              // Browser notification if window is not focused
+              showBrowserNotification(
+                `#${channel.name}`,
+                `${senderName}: ${message.content}`,
+                {
+                  tag: `channel-${channel.id}`,
+                  renotify: true,
+                }
+              );
+            }
+            
+            // In-app notification
+            addNotification({
+              type: 'info',
+              title: `新しいメッセージ - #${channel.name}`,
+              message: `${senderName}: ${message.content.substring(0, 100)}${message.content.length > 100 ? '...' : ''}`,
+              autoHide: true,
+              duration: 4000,
+            });
+          }
+        } else if (message.type === 'typing' && message.channel_id === channel.id.toString()) {
+          // Handle typing indicators
+          const typingUserId = message.user_id;
+          const isTyping = message.is_typing;
+          const userName = message.user_name || `ユーザー${typingUserId}`;
+          
+          if (typingUserId !== user.id.toString()) {
+            setTypingUsers(prev => {
+              if (isTyping) {
+                // Add user to typing list if not already there
+                return prev.includes(userName) ? prev : [...prev, userName];
+              } else {
+                // Remove user from typing list
+                return prev.filter(name => name !== userName);
+              }
+            });
           }
         }
       });
@@ -106,6 +151,16 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
     }
   };
 
+  const handleTyping = (isTyping: boolean) => {
+    if (!user) return;
+    
+    try {
+      websocketService.sendTypingIndicator(channel.id.toString(), isTyping);
+    } catch (error) {
+      console.warn('Failed to send typing indicator:', error);
+    }
+  };
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -113,22 +168,22 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
   return (
     <div className="h-full flex flex-col">
       {/* Channel header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
         <div className="flex items-center space-x-2">
-          <span className="text-lg font-semibold text-gray-900">
+          <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
             {channel.is_private ? '🔒' : '#'} {channel.name}
           </span>
           {channel.description && (
-            <span className="text-sm text-gray-500">— {channel.description}</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400">— {channel.description}</span>
           )}
         </div>
       </div>
 
       {/* Messages area */}
-      <div className="flex-1 overflow-y-auto bg-white">
+      <div className="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
         {loading ? (
           <div className="h-full flex items-center justify-center">
-            <div className="text-gray-500">メッセージを読み込み中...</div>
+            <div className="text-gray-500 dark:text-gray-400">メッセージを読み込み中...</div>
           </div>
         ) : (
           <MessageList messages={messages} currentUser={user} onReactionAdded={loadMessages} />
@@ -136,9 +191,30 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Typing indicator */}
+      {typingUsers.length > 0 && (
+        <div className="px-6 py-2 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+            <div className="flex space-x-1">
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+              <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+            </div>
+            <span>
+              {typingUsers.length === 1
+                ? `${typingUsers[0]}が入力中...`
+                : typingUsers.length === 2
+                ? `${typingUsers[0]}と${typingUsers[1]}が入力中...`
+                : `${typingUsers.length}人が入力中...`
+              }
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Message input */}
-      <div className="bg-gray-50 border-t border-gray-200 p-4">
-        <MessageInput onSendMessage={handleSendMessage} />
+      <div className="bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
+        <MessageInput onSendMessage={handleSendMessage} onTyping={handleTyping} />
       </div>
     </div>
   );
