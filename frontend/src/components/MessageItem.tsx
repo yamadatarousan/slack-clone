@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { Message } from '../types';
 import { apiService } from '../services/api';
+import { useAuth } from '../hooks/useAuth';
 import ThreadView from './ThreadView';
 import EmojiPicker from './EmojiPicker';
 import FileMessage from './FileMessage';
@@ -14,8 +15,11 @@ interface MessageItemProps {
 }
 
 export default function MessageItem({ message, showHeader, isOwn, onReactionAdded }: MessageItemProps) {
+  const { user } = useAuth();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showThread, setShowThread] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editContent, setEditContent] = useState(message.content);
   const emojiButtonRef = useRef<HTMLButtonElement>(null);
   const formatTime = (timestamp: string) => {
     return new Date(timestamp).toLocaleTimeString('ja-JP', {
@@ -46,15 +50,98 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
     setShowEmojiPicker(false);
   };
 
+  const handleReactionClick = async (emoji: string, reactions: any[]) => {
+    if (!user) return;
+    
+    // Check if current user has already reacted with this emoji
+    const userReaction = reactions.find(r => r.user_id === user.id);
+    
+    if (userReaction) {
+      // User has already reacted, so remove the reaction
+      // Note: API service needs removeReaction method
+      console.log('User already reacted, would remove reaction');
+      // For now, just add the reaction (backend should handle duplicates)
+      await handleAddReaction(emoji);
+    } else {
+      // User hasn't reacted, so add the reaction
+      await handleAddReaction(emoji);
+    }
+  };
+
+  const handleDeleteMessage = async () => {
+    if (!window.confirm('このメッセージを削除しますか？')) {
+      return;
+    }
+    
+    try {
+      await apiService.deleteMessage(message.id);
+      onReactionAdded?.(); // Refresh messages
+    } catch (error) {
+      console.error('Failed to delete message:', error);
+      alert('メッセージの削除に失敗しました');
+    }
+  };
+
+  const handleEditMessage = async () => {
+    if (!editContent.trim() || editContent === message.content) {
+      setIsEditing(false);
+      setEditContent(message.content);
+      return;
+    }
+    
+    try {
+      await apiService.updateMessage(message.id, { content: editContent });
+      onReactionAdded?.(); // Refresh messages
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Failed to edit message:', error);
+      alert('メッセージの編集に失敗しました');
+      setEditContent(message.content); // Reset content
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditContent(message.content);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleEditMessage();
+    } else if (e.key === 'Escape') {
+      handleCancelEdit();
+    }
+  };
+
   const getEmojiPickerPosition = () => {
     if (emojiButtonRef.current) {
       const rect = emojiButtonRef.current.getBoundingClientRect();
-      return {
-        top: rect.bottom + 5,
-        left: rect.left,
-      };
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const pickerWidth = 320; // EmojiPicker width
+      const pickerHeight = 384; // EmojiPicker height
+      
+      let top = rect.bottom + 5;
+      let left = rect.left;
+      
+      // Adjust if picker would go off right edge
+      if (left + pickerWidth > viewportWidth) {
+        left = rect.right - pickerWidth;
+      }
+      
+      // Adjust if picker would go off bottom edge
+      if (top + pickerHeight > viewportHeight) {
+        top = rect.top - pickerHeight - 5;
+      }
+      
+      // Ensure minimum margins
+      left = Math.max(10, Math.min(left, viewportWidth - pickerWidth - 10));
+      top = Math.max(10, Math.min(top, viewportHeight - pickerHeight - 10));
+      
+      return { top, left };
     }
-    return { top: 0, left: 0 };
+    return { top: 100, left: 100 }; // Fallback position
   };
 
 
@@ -132,6 +219,37 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
                     />
                   );
                 }
+                if (isEditing) {
+                  return (
+                    <div className="space-y-2">
+                      <textarea
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                        onKeyDown={handleKeyPress}
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 resize-none"
+                        rows={3}
+                        autoFocus
+                      />
+                      <div className="flex space-x-2 text-sm">
+                        <button
+                          onClick={handleEditMessage}
+                          className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                        >
+                          保存
+                        </button>
+                        <button
+                          onClick={handleCancelEdit}
+                          className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors"
+                        >
+                          キャンセル
+                        </button>
+                        <span className="text-gray-500 self-center">
+                          Enterで保存 • Escでキャンセル
+                        </span>
+                      </div>
+                    </div>
+                  );
+                }
                 return (
                   <div className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words">
                     <MentionText content={message.content} />
@@ -139,24 +257,42 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
                 );
               })()}
               
-              {/* Hover actions */}
-              <div className="absolute -top-2 right-0 opacity-0 group-hover:opacity-100 transition-opacity">
+              {/* Hover actions - 改善された位置決め */}
+              <div className="absolute top-0 -right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                 <div className="flex space-x-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded shadow-lg p-1">
                   <button
                     ref={emojiButtonRef}
                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                    className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
+                    className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded text-sm"
                     title="リアクションを追加"
                   >
                     😊
                   </button>
                   <button
                     onClick={() => setShowThread(true)}
-                    className="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
+                    className="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded text-sm"
                     title="スレッドで返信"
                   >
                     💬
                   </button>
+                  {isOwn && (
+                    <>
+                      <button
+                        onClick={() => setIsEditing(true)}
+                        className="p-1 text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900 rounded text-sm"
+                        title="メッセージを編集"
+                      >
+                        ✏️
+                      </button>
+                      <button
+                        onClick={handleDeleteMessage}
+                        className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900 rounded text-sm"
+                        title="メッセージを削除"
+                      >
+                        🗑️
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
               
@@ -187,6 +323,37 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
                   />
                 );
               }
+              if (isEditing) {
+                return (
+                  <div className="space-y-2">
+                    <textarea
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                      className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 resize-none"
+                      rows={3}
+                      autoFocus
+                    />
+                    <div className="flex space-x-2 text-sm">
+                      <button
+                        onClick={handleEditMessage}
+                        className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+                      >
+                        保存
+                      </button>
+                      <button
+                        onClick={handleCancelEdit}
+                        className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors"
+                      >
+                        キャンセル
+                      </button>
+                      <span className="text-gray-500 self-center">
+                        Enterで保存 • Escでキャンセル
+                      </span>
+                    </div>
+                  </div>
+                );
+              }
               return (
                 <div className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words">
                   <MentionText content={message.content} />
@@ -194,23 +361,42 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
               );
             })()}
             
-            {/* Hover actions */}
-            <div className="absolute -top-2 right-0 opacity-0 group-hover:opacity-100 transition-opacity">
+            {/* Hover actions - 改善された位置決め */}
+            <div className="absolute top-0 -right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
               <div className="flex space-x-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded shadow-lg p-1">
                 <button
+                  ref={emojiButtonRef}
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                  className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
+                  className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded text-sm"
                   title="リアクションを追加"
                 >
                   😊
                 </button>
                 <button
                   onClick={() => setShowThread(true)}
-                  className="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
+                  className="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded text-sm"
                   title="スレッドで返信"
                 >
                   💬
                 </button>
+                {isOwn && (
+                  <>
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      className="p-1 text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900 rounded text-sm"
+                      title="メッセージを編集"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      onClick={handleDeleteMessage}
+                      className="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900 rounded text-sm"
+                      title="メッセージを削除"
+                    >
+                      🗑️
+                    </button>
+                  </>
+                )}
               </div>
             </div>
             
@@ -237,17 +423,26 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
               return groups;
             }, {});
 
-            return Object.entries(reactionGroups).map(([emoji, reactions]) => (
-              <button
-                key={emoji}
-                onClick={() => handleAddReaction(emoji)}
-                className="inline-flex items-center px-2 py-1 rounded text-xs bg-gray-100 hover:bg-gray-200 transition-colors"
-                title={`${reactions.length}人がリアクションしました`}
-              >
-                <span>{emoji}</span>
-                <span className="ml-1 text-gray-600">{reactions.length}</span>
-              </button>
-            ));
+            return Object.entries(reactionGroups).map(([emoji, reactions]) => {
+              // Check if current user has reacted with this emoji
+              const userHasReacted = user && reactions.some(r => r.user_id === user.id);
+              
+              return (
+                <button
+                  key={emoji}
+                  onClick={() => handleReactionClick(emoji, reactions)}
+                  className={`inline-flex items-center px-2 py-1 rounded text-xs transition-colors ${
+                    userHasReacted 
+                      ? 'bg-blue-100 hover:bg-blue-200 border border-blue-300 text-blue-700' 
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                  title={`${reactions.length}人がリアクションしました${userHasReacted ? '（あなたを含む）' : ''}`}
+                >
+                  <span>{emoji}</span>
+                  <span className="ml-1">{reactions.length}</span>
+                </button>
+              );
+            });
           })()}
         </div>
       )}

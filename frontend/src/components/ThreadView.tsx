@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Message } from '../types';
 import { apiService } from '../services/api';
 import { useAuth } from '../hooks/useAuth';
@@ -16,12 +16,40 @@ export default function ThreadView({ isOpen, onClose, parentMessage, onReplyAdde
   const { user } = useAuth();
   const [replies, setReplies] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const repliesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen && parentMessage) {
       loadReplies();
     }
   }, [isOpen, parentMessage?.id]);
+
+  // Handle escape key to close modal
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      // Focus the modal for keyboard navigation
+      modalRef.current?.focus();
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen, onClose]);
+
+  // Handle backdrop click to close modal
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
 
   const loadReplies = async () => {
     if (!parentMessage) return;
@@ -37,6 +65,10 @@ export default function ThreadView({ isOpen, onClose, parentMessage, onReplyAdde
     }
   };
 
+  const scrollToBottom = () => {
+    repliesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const handleSendReply = async (content: string) => {
     if (!parentMessage) return;
 
@@ -50,6 +82,9 @@ export default function ThreadView({ isOpen, onClose, parentMessage, onReplyAdde
       // Reload replies
       await loadReplies();
       onReplyAdded?.();
+      
+      // Scroll to bottom to show new reply
+      setTimeout(scrollToBottom, 100);
     } catch (error) {
       console.error('Failed to send reply:', error);
     }
@@ -58,8 +93,16 @@ export default function ThreadView({ isOpen, onClose, parentMessage, onReplyAdde
   if (!isOpen || !parentMessage) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] flex flex-col">
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      onClick={handleBackdropClick}
+    >
+      <div 
+        ref={modalRef}
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] flex flex-col focus:outline-none"
+        tabIndex={-1}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center space-x-2">
@@ -112,16 +155,17 @@ export default function ThreadView({ isOpen, onClose, parentMessage, onReplyAdde
                   {replies.length}件の返信
                 </div>
                 
-                {replies.map((reply) => (
+                {replies.map((reply, index) => (
                   <div key={reply.id} className="border-l-2 border-blue-200 dark:border-blue-700 pl-4">
                     <MessageItem
                       message={reply}
-                      showHeader={true}
+                      showHeader={index === 0 || replies[index - 1]?.user_id !== reply.user_id}
                       isOwn={reply.user_id === user?.id}
                       onReactionAdded={loadReplies}
                     />
                   </div>
                 ))}
+                <div ref={repliesEndRef} />
               </div>
             )}
           </div>

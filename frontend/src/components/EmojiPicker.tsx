@@ -98,7 +98,7 @@ export default function EmojiPicker({ isOpen, onClose, onEmojiSelect, position =
     if (searchQuery) {
       // Simple search by category name or emoji
       const allEmojis = emojiCategories.flatMap(cat => cat.emojis);
-      setFilteredEmojis(allEmojis.filter(emoji => {
+      setFilteredEmojis(allEmojis.filter(() => {
         // You could implement more sophisticated search here
         return true; // For now, show all emojis
       }));
@@ -128,12 +128,43 @@ export default function EmojiPicker({ isOpen, onClose, onEmojiSelect, position =
 
   if (!isOpen) return null;
 
-  const positionStyle = {
-    top: position.top,
-    left: position.left,
-    right: position.right,
-    bottom: position.bottom,
+  // Calculate position to ensure picker stays within viewport
+  const calculatePosition = () => {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const pickerWidth = 320; // w-80 = 320px
+    const pickerHeight = 384; // h-96 = 384px
+    
+    const finalPosition = { ...position };
+    
+    // Adjust horizontal position if it would go off-screen
+    if (position.left !== undefined) {
+      if (position.left + pickerWidth > viewportWidth) {
+        finalPosition.left = viewportWidth - pickerWidth - 10;
+      }
+      if (position.left < 10) {
+        finalPosition.left = 10;
+      }
+    }
+    
+    // Adjust vertical position if it would go off-screen
+    if (position.top !== undefined) {
+      if (position.top + pickerHeight > viewportHeight) {
+        finalPosition.top = position.top - pickerHeight - 10;
+        // If still off-screen, position at bottom of viewport
+        if (finalPosition.top < 10) {
+          finalPosition.top = viewportHeight - pickerHeight - 10;
+        }
+      }
+      if (position.top < 10) {
+        finalPosition.top = 10;
+      }
+    }
+    
+    return finalPosition;
   };
+
+  const positionStyle = calculatePosition();
 
   return (
     <div 
