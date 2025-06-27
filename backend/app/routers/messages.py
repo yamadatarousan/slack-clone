@@ -14,6 +14,27 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
+def get_reactions_for_message(db: Session, message_id: int) -> List[dict]:
+    """Helper function to get reactions for a message"""
+    reactions = db.query(Reaction).filter(Reaction.message_id == message_id).all()
+    reactions_data = []
+    for reaction in reactions:
+        reaction_user = db.query(User).filter(User.id == reaction.user_id).first()
+        reactions_data.append({
+            "id": reaction.id,
+            "emoji": reaction.emoji,
+            "message_id": reaction.message_id,
+            "user_id": reaction.user_id,
+            "created_at": reaction.created_at,
+            "user": {
+                "id": reaction_user.id,
+                "username": reaction_user.username,
+                "display_name": reaction_user.display_name
+            } if reaction_user else None
+        })
+    return reactions_data
+
+
 @router.post("/", response_model=MessageResponse)
 def create_message(
     message: MessageCreate,
@@ -74,7 +95,7 @@ def create_message(
             "created_at": db_message.created_at,
             "updated_at": db_message.updated_at,
             "sender": sender_data,
-            "reactions": [],
+            "reactions": get_reactions_for_message(db, db_message.id),
             "reply_count": 0
         }
         return response_data
@@ -138,7 +159,7 @@ def get_channel_messages(
             "created_at": msg.created_at,
             "updated_at": msg.updated_at,
             "sender": sender_data,
-            "reactions": [],
+            "reactions": get_reactions_for_message(db, msg.id),
             "reply_count": 0
         }
         serialized_messages.append(message_data)
@@ -382,7 +403,7 @@ def get_message_thread(
             "created_at": msg.created_at,
             "updated_at": msg.updated_at,
             "sender": sender_data,
-            "reactions": [],
+            "reactions": get_reactions_for_message(db, msg.id),
             "reply_count": 0
         }
         serialized_messages.append(message_data)
