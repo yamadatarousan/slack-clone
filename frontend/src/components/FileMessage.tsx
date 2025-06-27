@@ -10,9 +10,6 @@ export default function FileMessage({ fileName, fileUrl, fileSize }: FileMessage
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Debug: Log the props to verify they're correct
-  console.log('FileMessage props:', { fileName, fileUrl, fileSize });
-
   const getFileExtension = (filename: string) => {
     return filename.split('.').pop()?.toLowerCase() || '';
   };

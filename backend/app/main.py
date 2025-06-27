@@ -4,10 +4,11 @@ from typing import List
 import json
 import asyncio
 import logging
+from sqlalchemy.orm import Session
 
 from app.routers import auth, channels, messages, files, search
-from app.database.base import engine
-from app.database.models import Base
+from app.database.base import engine, get_db
+from app.database.models import Base, User
 
 # ログ設定
 logging.basicConfig(
@@ -66,15 +67,17 @@ class ConnectionManager:
             await websocket.send_text(message)
 
     async def broadcast(self, message: str):
+        print(f"📡 Broadcasting to {len(self.active_connections)} connections: {message}")
         for connection in self.active_connections:
             try:
                 await connection.send_text(message)
-            except:
-                # 接続が切れている場合は無視
-                pass
+            except Exception as e:
+                print(f"Failed to send message to connection: {e}")
 
     async def broadcast_to_channel(self, message: str, channel_id: str):
-        # 実際の実装では、チャンネルメンバーのみに送信
+        # TODO: 本来はチャンネルメンバーのみに送信すべきだが、
+        # 現在は簡単化のため全ユーザーに送信
+        print(f"📡 Broadcasting to channel {channel_id}: {message}")
         await self.broadcast(message)
 
 manager = ConnectionManager()
@@ -90,6 +93,7 @@ async def health_check():
 @app.websocket("/ws/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, user_id: str):
     await manager.connect(websocket, user_id)
+    db = next(get_db())
     try:
         # 接続通知を他のユーザーに送信
         await manager.broadcast(json.dumps({
@@ -105,26 +109,37 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
             
             # メッセージタイプに応じて処理
             if message_data["type"] == "message":
+                # ユーザー情報を取得
+                user = db.query(User).filter(User.id == int(user_id)).first()
+                sender_name = user.display_name if user and user.display_name else (user.username if user else f"User{user_id}")
+                
                 # チャンネルメッセージの場合
                 broadcast_message = {
                     "type": "message",
                     "user_id": user_id,
                     "channel_id": message_data.get("channel_id", "general"),
                     "content": message_data["content"],
+                    "sender_name": sender_name,
                     "timestamp": asyncio.get_event_loop().time()
                 }
+                print(f"📨 Sending message from user {user_id} ({sender_name}) to channel {message_data.get('channel_id', 'general')}: {message_data['content']}")
                 await manager.broadcast_to_channel(
                     json.dumps(broadcast_message),
                     message_data.get("channel_id", "general")
                 )
             
             elif message_data["type"] == "typing":
+                # ユーザー情報を取得
+                user = db.query(User).filter(User.id == int(user_id)).first()
+                user_name = user.display_name if user and user.display_name else (user.username if user else f"User{user_id}")
+                
                 # タイピング中の通知
                 typing_message = {
                     "type": "typing",
                     "user_id": user_id,
                     "channel_id": message_data.get("channel_id", "general"),
-                    "is_typing": message_data.get("is_typing", False)
+                    "is_typing": message_data.get("is_typing", False),
+                    "user_name": user_name
                 }
                 await manager.broadcast_to_channel(
                     json.dumps(typing_message),
@@ -139,6 +154,8 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
             "user_id": user_id,
             "timestamp": asyncio.get_event_loop().time()
         }))
+    finally:
+        db.close()
 
 # テスト用のREST API
 @app.post("/send-message")

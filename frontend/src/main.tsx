@@ -5,13 +5,16 @@ import App from './App.tsx'
 import { AuthProvider } from './hooks/useAuth.tsx'
 import { ThemeProvider } from './contexts/ThemeContext.tsx'
 import { NotificationProvider } from './contexts/NotificationContext.tsx'
+import { GlobalWebSocketProvider } from './contexts/GlobalWebSocketContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider>
       <NotificationProvider>
         <AuthProvider>
-          <App />
+          <GlobalWebSocketProvider>
+            <App />
+          </GlobalWebSocketProvider>
         </AuthProvider>
       </NotificationProvider>
     </ThemeProvider>

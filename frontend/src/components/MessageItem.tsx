@@ -4,6 +4,7 @@ import { apiService } from '../services/api';
 import ThreadView from './ThreadView';
 import EmojiPicker from './EmojiPicker';
 import FileMessage from './FileMessage';
+import MentionText from './MentionText';
 
 interface MessageItemProps {
   message: Message;
@@ -73,12 +74,6 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
     const fileMessageRegex = /^📎\s+(.+)\n(.+)$/;
     const match = content.match(fileMessageRegex);
     
-    // Debug: Log the content to see what we're parsing
-    if (content.includes('📎')) {
-      console.log('Parsing potential file message:', content);
-      console.log('Regex match:', match);
-    }
-    
     if (match) {
       let fileUrl = match[2].trim();
       
@@ -86,8 +81,6 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
       if (fileUrl.startsWith('/')) {
         fileUrl = `http://localhost:8000${fileUrl}`;
       }
-      
-      console.log('Parsed file message:', { fileName: match[1].trim(), fileUrl });
       
       return {
         isFile: true,
@@ -140,9 +133,9 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
                   );
                 }
                 return (
-                  <p className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words">
-                    {message.content}
-                  </p>
+                  <div className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words">
+                    <MentionText content={message.content} />
+                  </div>
                 );
               })()}
               
@@ -195,9 +188,9 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
                 );
               }
               return (
-                <p className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words">
-                  {message.content}
-                </p>
+                <div className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words">
+                  <MentionText content={message.content} />
+                </div>
               );
             })()}
             

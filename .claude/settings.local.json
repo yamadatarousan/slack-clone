@@ -21,7 +21,9 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(uvicorn:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(chmod:*)",
+      "Bash(git rm:*)"
     ],
     "deny": []
   }
