@@ -253,26 +253,32 @@ def delete_message(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    message = db.query(Message).filter(Message.id == message_id).first()
-    if not message:
-        raise HTTPException(status_code=404, detail="Message not found")
-    
-    # Check if user is the sender or channel admin
-    is_sender = message.user_id == current_user.id
-    is_admin = db.query(channel_members).filter(
-        channel_members.c.user_id == current_user.id,
-        channel_members.c.channel_id == message.channel_id,
-        channel_members.c.role.in_(['admin', 'owner'])
-    ).first()
-    
-    if not is_sender and not is_admin:
-        raise HTTPException(status_code=403, detail="Access denied")
-    
-    # Delete message (hard delete since no deleted column)
-    db.delete(message)
-    db.commit()
-    
-    return {"message": "Message deleted successfully"}
+    try:
+        logger.info(f"Attempting to delete message {message_id} by user {current_user.id}")
+        
+        message = db.query(Message).filter(Message.id == message_id).first()
+        if not message:
+            logger.warning(f"Message {message_id} not found")
+            raise HTTPException(status_code=404, detail="Message not found")
+        
+        # Check if user is the sender
+        if message.user_id != current_user.id:
+            logger.warning(f"User {current_user.id} attempted to delete message {message_id} they don't own")
+            raise HTTPException(status_code=403, detail="Can only delete your own messages")
+        
+        # Delete related reactions first to avoid foreign key constraint issues
+        db.query(Reaction).filter(Reaction.message_id == message_id).delete()
+        
+        # Delete the message
+        db.delete(message)
+        db.commit()
+        logger.info(f"Message {message_id} deleted successfully by user {current_user.id}")
+        
+        return {"message": "Message deleted successfully"}
+    except Exception as e:
+        logger.error(f"Error deleting message {message_id}: {str(e)}", exc_info=True)
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to delete message: {str(e)}")
 
 
 @router.post("/{message_id}/reactions", response_model=dict)
