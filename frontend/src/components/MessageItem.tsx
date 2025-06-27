@@ -448,7 +448,7 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
       )}
 
       {/* Thread reply count */}
-      {message.reply_count && message.reply_count > 0 && (
+      {message.reply_count !== undefined && message.reply_count > 0 && (
         <div className="ml-11 mt-2">
           <button
             onClick={() => setShowThread(true)}

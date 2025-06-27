@@ -52,6 +52,14 @@ function AppRoutes() {
           }
         />
         <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <AuthPage />
+            </PublicRoute>
+          }
+        />
+        <Route
           path="/chat"
           element={
             <ProtectedRoute>
