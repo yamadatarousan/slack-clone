@@ -446,6 +446,20 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
           })()}
         </div>
       )}
+
+      {/* Thread reply count */}
+      {message.reply_count && message.reply_count > 0 && (
+        <div className="ml-11 mt-2">
+          <button
+            onClick={() => setShowThread(true)}
+            className="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1 rounded transition-colors"
+          >
+            <span>💬</span>
+            <span>{message.reply_count}件の返信</span>
+            <span className="text-gray-500">スレッドを表示</span>
+          </button>
+        </div>
+      )}
       
       <ThreadView
         isOpen={showThread}

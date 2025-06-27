@@ -35,6 +35,11 @@ def get_reactions_for_message(db: Session, message_id: int) -> List[dict]:
     return reactions_data
 
 
+def get_reply_count_for_message(db: Session, message_id: int) -> int:
+    """Helper function to get reply count for a message"""
+    return db.query(Message).filter(Message.thread_id == message_id).count()
+
+
 @router.post("/", response_model=MessageResponse)
 def create_message(
     message: MessageCreate,
@@ -57,7 +62,7 @@ def create_message(
     
     # Create message
     try:
-        logger.info(f"Creating message: content={message.content}, channel_id={message.channel_id}, user_id={current_user.id}")
+        logger.info(f"Creating message: content={message.content}, channel_id={message.channel_id}, user_id={current_user.id}, parent_message_id={message.parent_message_id}")
         db_message = Message(
             content=message.content,
             message_type=message.message_type or "text",
@@ -96,7 +101,7 @@ def create_message(
             "updated_at": db_message.updated_at,
             "sender": sender_data,
             "reactions": get_reactions_for_message(db, db_message.id),
-            "reply_count": 0
+            "reply_count": get_reply_count_for_message(db, db_message.id)
         }
         return response_data
     except Exception as e:
@@ -127,9 +132,10 @@ def get_channel_messages(
     if not member and channel.channel_type == 'private':
         raise HTTPException(status_code=403, detail="Access denied")
     
-    # Get messages
+    # Get messages (exclude thread replies - only get top-level messages)
     messages = db.query(Message).filter(
-        Message.channel_id == channel_id
+        Message.channel_id == channel_id,
+        Message.thread_id.is_(None)  # Only get messages that are not replies
     ).order_by(Message.created_at.desc()).offset(skip).limit(limit).all()
     
     # Manually serialize the response to avoid relationship loading issues
@@ -160,7 +166,7 @@ def get_channel_messages(
             "updated_at": msg.updated_at,
             "sender": sender_data,
             "reactions": get_reactions_for_message(db, msg.id),
-            "reply_count": 0
+            "reply_count": get_reply_count_for_message(db, msg.id)
         }
         serialized_messages.append(message_data)
     
@@ -210,7 +216,7 @@ def get_message(
         "created_at": message.created_at,
         "updated_at": message.updated_at,
         "sender": sender_data,
-        "reactions": [],
+        "reactions": get_reactions_for_message(db, message.id),
         "reply_count": 0
     }
     return response_data
@@ -262,7 +268,7 @@ def update_message(
         "created_at": message.created_at,
         "updated_at": message.updated_at,
         "sender": sender_data,
-        "reactions": [],
+        "reactions": get_reactions_for_message(db, message.id),
         "reply_count": 0
     }
     return response_data
@@ -372,9 +378,11 @@ def get_message_thread(
         raise HTTPException(status_code=403, detail="Access denied")
     
     # Get thread messages
+    logger.info(f"Getting thread messages for parent message {message_id}")
     thread_messages = db.query(Message).filter(
         Message.thread_id == message_id
     ).order_by(Message.created_at.asc()).offset(skip).limit(limit).all()
+    logger.info(f"Found {len(thread_messages)} thread messages for parent {message_id}")
     
     # Manually serialize the response to avoid relationship loading issues
     serialized_messages = []
@@ -404,7 +412,7 @@ def get_message_thread(
             "updated_at": msg.updated_at,
             "sender": sender_data,
             "reactions": get_reactions_for_message(db, msg.id),
-            "reply_count": 0
+            "reply_count": get_reply_count_for_message(db, msg.id)
         }
         serialized_messages.append(message_data)
     
