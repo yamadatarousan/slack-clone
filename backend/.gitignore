@@ -130,7 +130,9 @@ dmypy.json
 
 # FastAPI specific
 logs/
+app/logs/
 *.log
+app.log
 
 # Database files
 *.db
