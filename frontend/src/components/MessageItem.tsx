@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { Message } from '../types';
 import { apiService } from '../services/api';
 import { useAuth } from '../hooks/useAuth';
+import { useOnlineStatus } from '../contexts/OnlineStatusContext';
 import ThreadView from './ThreadView';
 import EmojiPicker from './EmojiPicker';
 import FileMessage from './FileMessage';
@@ -16,6 +17,7 @@ interface MessageItemProps {
 
 export default function MessageItem({ message, showHeader, isOwn, onReactionAdded }: MessageItemProps) {
   const { user } = useAuth();
+  const { isUserOnline } = useOnlineStatus();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showThread, setShowThread] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -146,12 +148,19 @@ export default function MessageItem({ message, showHeader, isOwn, onReactionAdde
 
 
   const getStatusColor = (sender: any) => {
-    if (!sender || !sender.is_online) return 'bg-gray-400';
+    if (!sender) return 'bg-gray-400';
+    
+    // Use OnlineStatusContext to get real-time status
+    const isOnline = isUserOnline(sender.id?.toString() || sender.user_id?.toString() || '');
+    
+    if (!isOnline) return 'bg-gray-400';
+    
+    // Use sender's status if available, otherwise default to green for online
     switch (sender.status) {
       case 'active': return 'bg-green-400';
       case 'away': return 'bg-yellow-400';
       case 'busy': return 'bg-red-400';
-      default: return 'bg-gray-400';
+      default: return 'bg-green-400'; // Default to green if online
     }
   };
 

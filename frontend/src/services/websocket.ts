@@ -17,6 +17,9 @@ export class WebSocketService {
         this.ws.close(1000, 'Reconnecting');
       }
       
+      // Add browser event listeners to handle page unload
+      this.setupPageUnloadHandlers();
+      
       this.userId = userId;
       // デバッグ用にグローバルに保存
       (window as any).websocketService = this;
@@ -40,11 +43,16 @@ export class WebSocketService {
               rawData: event.data,
               parsedMessage: message,
               handlersCount: this.messageHandlers.length,
-              timestamp: new Date().toISOString()
+              timestamp: new Date().toISOString(),
+              messageType: message.type,
+              isUserConnectedMessage: message.type === 'user_connected'
             });
             
             // Create unique message ID for deduplication
             const messageId = `${message.type}-${message.user_id}-${message.channel_id || 'none'}-${message.timestamp || Date.now()}-${JSON.stringify(message).slice(0, 50)}`;
+            
+            console.log('🔍 WebSocket: Generated message ID:', messageId);
+            console.log('🔍 WebSocket: Already processed IDs:', Array.from(this.processedMessages));
             
             // Check for duplicate messages
             if (this.processedMessages.has(messageId)) {
@@ -63,9 +71,10 @@ export class WebSocketService {
             
             // 🔥 強制的にハンドラーを呼び出す（デバッグ用）
             if (this.messageHandlers.length > 0) {
-              console.log('🔥 Calling message handlers...');
+              console.log('🔥 Calling message handlers for message type:', message.type);
+              console.log('🔥 Total handlers:', this.messageHandlers.length);
               this.messageHandlers.forEach((handler, index) => {
-                console.log(`🔥 Calling handler ${index}...`);
+                console.log(`🔥 Calling handler ${index} for message:`, message);
                 try {
                   handler(message);
                   console.log(`✅ Handler ${index} completed`);
@@ -181,6 +190,40 @@ export class WebSocketService {
   isConnected(): boolean {
     return this.ws?.readyState === WebSocket.OPEN;
   }
+
+  private setupPageUnloadHandlers(): void {
+    // Remove existing listeners to avoid duplicates
+    window.removeEventListener('beforeunload', this.handlePageUnload);
+    window.removeEventListener('unload', this.handlePageUnload);
+    
+    // Add new listeners
+    window.addEventListener('beforeunload', this.handlePageUnload);
+    window.addEventListener('unload', this.handlePageUnload);
+    
+    // Also handle visibility change (when tab becomes hidden)
+    document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+    document.addEventListener('visibilitychange', this.handleVisibilityChange);
+  }
+
+  private handlePageUnload = () => {
+    console.log('🔴 Page unload detected, closing WebSocket');
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      // Close immediately without waiting
+      this.ws.close(1000, 'Page unload');
+    }
+  };
+
+  private handleVisibilityChange = () => {
+    if (document.hidden) {
+      console.log('🔴 Tab hidden, ensuring WebSocket will close properly');
+      // Don't close immediately on visibility change, but ensure it's ready to close
+      if (this.ws) {
+        this.ws.onbeforeunload = () => {
+          this.ws?.close(1000, 'Tab hidden');
+        };
+      }
+    }
+  };
 }
 
 export const websocketService = new WebSocketService();

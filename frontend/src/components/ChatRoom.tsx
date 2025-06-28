@@ -62,16 +62,144 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
   }, [channel.id]);
 
   useEffect(() => {
-    // Connect to WebSocket when component mounts or channel changes
-    if (user) {
-      connectWebSocket();
-    }
+    // Only register message handler for this channel, don't manage connection
+    if (user && websocketService.isConnected()) {
+      console.log('📝 ChatRoom: Registering channel-specific message handler');
+      const unsubscribe = websocketService.onMessage((message) => {
+        console.log('🎯 ChatRoom handler received message:', { 
+          messageType: message.type, 
+          messageChannelId: message.channel_id, 
+          currentChannelId: channel.id.toString(),
+        });
+        
+        // Only process messages for this specific channel - let other handlers process other types
+        if (message.type === 'message' && message.channel_id === channel.id.toString()) {
+          console.log('📨 Processing message for current channel');
+          
+          // Create simpler message ID to prevent duplicate processing
+          // Use a shorter ID to reduce false positive duplicates
+          const messageId = `${message.user_id}-${message.channel_id}-${message.content.substring(0, 50)}`;
+          
+          console.log('🔍 Processing message with ID:', messageId);
+          
+          // Check if we've already processed this message (shorter time window)
+          if (processedMessageIds.current.has(messageId)) {
+            console.log('🔄 Skipping duplicate message:', messageId);
+            return;
+          }
+          
+          // Mark message as processed
+          processedMessageIds.current.add(messageId);
+          
+          // Clean up old message IDs more aggressively (keep only last 20)
+          if (processedMessageIds.current.size > 20) {
+            const idsArray = Array.from(processedMessageIds.current);
+            processedMessageIds.current = new Set(idsArray.slice(-10));
+          }
+          
+          // Reload messages without loading indicator for WebSocket updates
+          loadMessages(false);
+          
+          // Only show notifications for messages from other users
+          if (message.user_id !== user.id.toString()) {
+            // Show notification for new messages
+            const isWindowFocused = document.hasFocus();
+            const senderName = message.sender_name || `ユーザー${message.user_id}`;
+            
+            // Check if current user is mentioned (using same logic as MentionText)
+            const isMentioned = user && checkIfUserMentioned(message.content, user);
+            
+            console.log('📨 New message received:', {
+              content: message.content,
+              sender: senderName,
+              messageUserId: message.user_id,
+              currentUserId: user?.id,
+              currentUser: user?.username,
+              currentUserDisplay: user?.display_name,
+              isMentioned,
+              isWindowFocused,
+              shouldShowBrowserNotification: !isWindowFocused || isMentioned,
+              isFromOtherUser: message.user_id !== user?.id?.toString()
+            });
+            
+            // Browser notification logic
+            const shouldShowBrowserNotification = !isWindowFocused || isMentioned;
+            
+            if (shouldShowBrowserNotification) {
+              const notificationTitle = isMentioned 
+                ? `💬 メンション - #${channel.name}`
+                : `#${channel.name}`;
+              
+              const notificationOptions = {
+                tag: isMentioned ? `mention-${channel.id}-${Date.now()}` : `channel-${channel.id}`,
+                renotify: true,
+                requireInteraction: isMentioned,
+                icon: '/favicon.ico',
+                badge: '/favicon.ico',
+              };
+              
+              console.log('🔔 Attempting to show browser notification:', {
+                title: notificationTitle,
+                body: `${senderName}: ${message.content}`,
+                options: notificationOptions,
+                isMentioned,
+                shouldShow: shouldShowBrowserNotification
+              });
+              
+              showBrowserNotification(
+                notificationTitle,
+                `${senderName}: ${message.content}`,
+                notificationOptions
+              );
+            } else {
+              console.log('🔕 Skipping browser notification:', {
+                shouldShowBrowserNotification,
+                isWindowFocused,
+                isMentioned
+              });
+            }
 
-    return () => {
-      // Don't disconnect here as GlobalWebSocketProvider manages connection
-      // Just clean up any local handlers
-    };
-  }, [user, channel.id]);
+            // Play notification sound
+            playNotificationSound(isMentioned);
+
+            // In-app notification with mention priority
+            addNotification({
+              type: isMentioned ? 'warning' : 'info',
+              title: isMentioned 
+                ? `💬 あなたがメンションされました - #${channel.name}`
+                : `新しいメッセージ - #${channel.name}`,
+              message: `${senderName}: ${message.content.substring(0, 100)}${message.content.length > 100 ? '...' : ''}`,
+              autoHide: true,
+              duration: isMentioned ? 8000 : 4000,
+            });
+          }
+        } else if (message.type === 'typing' && message.channel_id === channel.id.toString()) {
+          // Handle typing indicators
+          const typingUserId = message.user_id;
+          const isTyping = message.is_typing;
+          const userName = message.user_name || `ユーザー${typingUserId}`;
+          
+          if (typingUserId !== user.id.toString()) {
+            setTypingUsers(prev => {
+              if (isTyping) {
+                // Add user to typing list if not already there
+                return prev.includes(userName) ? prev : [...prev, userName];
+              } else {
+                // Remove user from typing list
+                return prev.filter(name => name !== userName);
+              }
+            });
+          }
+        }
+        // Do NOT handle user_connected/user_disconnected here - let OnlineStatusProvider handle those
+      });
+      
+      return () => {
+        console.log('📝 ChatRoom: Cleaning up channel-specific handler');
+        unsubscribe();
+      };
+    }
+  }, [user, channel.id, websocketService.isConnected()]);
 
   // WebSocket接続状態の監視はGlobalWebSocketProviderで管理
   // useEffect(() => {
@@ -153,9 +281,9 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
         console.log('✅ WebSocket connected successfully');
       }
       
-      // Clear existing message handlers to avoid conflicts
-      console.log('🧹 Clearing existing WebSocket handlers before registering new one');
-      (websocketService as any).messageHandlers = [];
+      // Don't clear all handlers - this would remove OnlineStatusProvider handler
+      // Instead, let WebSocket service handle duplicate registration
+      console.log('📝 Registering additional WebSocket handler for ChatRoom');
       
       // Listen for new messages
       console.log('📝 Registering WebSocket message handler for channel:', channel.id);

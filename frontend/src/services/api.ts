@@ -169,6 +169,12 @@ class ApiService {
     const response: AxiosResponse<{ status: string }> = await this.api.get('/health');
     return response.data;
   }
+
+  // オンラインユーザー状態を取得
+  async getOnlineUsers(): Promise<{ online_users: any[], count: number }> {
+    const response: AxiosResponse<{ online_users: any[], count: number }> = await this.api.get('/online-users');
+    return response.data;
+  }
 }
 
 export const apiService = new ApiService();

@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { WebSocketMessage } from '../types';
 import { websocketService } from '../services/websocket';
+import { useAuth } from '../hooks/useAuth';
+import { apiService } from '../services/api';
 
 interface OnlineUser {
   id: string;
@@ -24,48 +26,76 @@ interface OnlineStatusProviderProps {
 }
 
 export function OnlineStatusProvider({ children }: OnlineStatusProviderProps) {
+  const { user } = useAuth();
   const [onlineUsers, setOnlineUsers] = useState<Map<string, OnlineUser>>(new Map());
 
-  useEffect(() => {
-    const handleWebSocketMessage = (message: WebSocketMessage) => {
-      if (message.type === 'user_connected') {
-        console.log('📗 User connected:', message);
-        setOnlineUsers(prev => {
-          const newMap = new Map(prev);
-          newMap.set(message.user_id!, {
-            id: message.user_id!,
-            username: message.username!,
-            display_name: message.display_name,
+  // サーバーからオンライン状態を同期
+  const syncOnlineStatus = async () => {
+    try {
+      const data = await apiService.getOnlineUsers();
+      const newMap = new Map<string, OnlineUser>();
+      
+      if (data.online_users && Array.isArray(data.online_users)) {
+        data.online_users.forEach(user => {
+          newMap.set(user.id.toString(), {
+            id: user.id.toString(),
+            username: user.username,
+            display_name: user.display_name,
             is_online: true
           });
-          return newMap;
         });
-      } else if (message.type === 'user_disconnected') {
-        console.log('📕 User disconnected:', message);
-        setOnlineUsers(prev => {
-          const newMap = new Map(prev);
-          const user = newMap.get(message.user_id!);
-          if (user) {
-            newMap.set(message.user_id!, {
-              ...user,
-              is_online: false,
-              last_seen: new Date().toISOString()
-            });
-          }
-          return newMap;
-        });
+      }
+      
+      setOnlineUsers(newMap);
+      console.log(`🔄 Synced online status: ${data.count || 0} users online`);
+    } catch (error) {
+      console.error('Failed to sync online status:', error);
+      // エラーが発生してもアプリを続行
+    }
+  };
+
+  useEffect(() => {
+    let pollInterval: NodeJS.Timeout;
+    
+    const handleWebSocketMessage = (message: WebSocketMessage) => {
+      if (message.type === 'user_connected' || message.type === 'user_disconnected') {
+        // すぐにサーバーから最新状態を取得
+        syncOnlineStatus();
       }
     };
 
-    // WebSocketメッセージハンドラーを登録
+    // WebSocketハンドラーを登録
     const unsubscribe = websocketService.onMessage(handleWebSocketMessage);
+    
+    // 接続時に即座に同期
+    if (websocketService.isConnected()) {
+      syncOnlineStatus();
+    }
+    
+    // 10秒ごとにサーバーから状態を同期（確実性のため）
+    pollInterval = setInterval(() => {
+      if (websocketService.isConnected()) {
+        syncOnlineStatus();
+      }
+    }, 10000);
 
     return () => {
       if (unsubscribe) {
         unsubscribe();
       }
+      if (pollInterval) {
+        clearInterval(pollInterval);
+      }
     };
   }, []);
+
+  // ユーザーがログインした時にオンライン状態を同期
+  useEffect(() => {
+    if (user && websocketService.isConnected()) {
+      // WebSocket接続後に同期
+      setTimeout(syncOnlineStatus, 1000);
+    }
+  }, [user]);
 
   const isUserOnline = (userId: string): boolean => {
     const user = onlineUsers.get(userId);
@@ -73,8 +103,18 @@ export function OnlineStatusProvider({ children }: OnlineStatusProviderProps) {
   };
 
   const getOnlineCount = (): number => {
-    return Array.from(onlineUsers.values()).filter(user => user.is_online).length;
+    const onlineCount = Array.from(onlineUsers.values()).filter(user => user.is_online).length;
+    console.log('🔢 getOnlineCount:', {
+      totalUsers: onlineUsers.size,
+      onlineCount,
+      users: Array.from(onlineUsers.entries()),
+      timestamp: new Date().toISOString()
+    });
+    return onlineCount;
   };
+  
+  // サーバーから強制同期する関数
+  (window as any).syncOnlineStatus = syncOnlineStatus;
 
   const updateUserStatus = (userId: string, isOnline: boolean): void => {
     setOnlineUsers(prev => {

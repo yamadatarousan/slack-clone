@@ -6,15 +6,18 @@ import { AuthProvider } from './hooks/useAuth.tsx'
 import { ThemeProvider } from './contexts/ThemeContext.tsx'
 import { NotificationProvider } from './contexts/NotificationContext.tsx'
 import { GlobalWebSocketProvider } from './contexts/GlobalWebSocketContext.tsx'
+import { OnlineStatusProvider } from './contexts/OnlineStatusContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider>
       <NotificationProvider>
         <AuthProvider>
-          <GlobalWebSocketProvider>
-            <App />
-          </GlobalWebSocketProvider>
+          <OnlineStatusProvider>
+            <GlobalWebSocketProvider>
+              <App />
+            </GlobalWebSocketProvider>
+          </OnlineStatusProvider>
         </AuthProvider>
       </NotificationProvider>
     </ThemeProvider>

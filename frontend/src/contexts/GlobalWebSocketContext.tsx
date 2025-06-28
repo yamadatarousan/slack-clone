@@ -45,11 +45,12 @@ export function GlobalWebSocketProvider({ children }: GlobalWebSocketProviderPro
   const { addNotification, showBrowserNotification, playNotificationSound } = useNotifications();
   const isConnected = useRef(false);
   const reconnectTimer = useRef<NodeJS.Timeout>();
+  const unsubscribeRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if (!user) {
-      // ユーザーがログアウトした場合は切断
-      websocketService.disconnect();
+      // ユーザーがログアウトした場合は自分のハンドラーだけクリア
+      // (WebSocket接続自体は他のプロバイダーが使用している可能性があるため切断しない)
       isConnected.current = false;
       return;
     }
@@ -60,7 +61,13 @@ export function GlobalWebSocketProvider({ children }: GlobalWebSocketProviderPro
       if (reconnectTimer.current) {
         clearTimeout(reconnectTimer.current);
       }
-      websocketService.disconnect();
+      // Unsubscribe only our handler
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current();
+        unsubscribeRef.current = null;
+      }
+      // Don't disconnect WebSocket here as other providers may be using it
+      // websocketService.disconnect();
       isConnected.current = false;
     };
   }, [user]);
@@ -71,23 +78,20 @@ export function GlobalWebSocketProvider({ children }: GlobalWebSocketProviderPro
     try {
       console.log('🌐 Connecting global WebSocket for user:', user.id, user.username);
       
-      // 既存の接続をクリア
-      websocketService.disconnect();
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      // WebSocket接続を確立
-      await websocketService.connect(user.id.toString());
+      // Check if already connected to avoid disrupting existing handlers
+      if (!websocketService.isConnected()) {
+        // WebSocket接続を確立
+        await websocketService.connect(user.id.toString());
+      }
       isConnected.current = true;
       
       console.log('✅ Global WebSocket connected successfully');
       
       // グローバルメッセージハンドラーを登録
-      const unsubscribe = websocketService.onMessage(handleGlobalMessage);
+      unsubscribeRef.current = websocketService.onMessage(handleGlobalMessage);
       
       // ヘルスチェックを開始
       startHealthCheck();
-      
-      return unsubscribe;
       
     } catch (error) {
       console.error('❌ Global WebSocket connection failed:', error);
@@ -108,7 +112,8 @@ export function GlobalWebSocketProvider({ children }: GlobalWebSocketProviderPro
       currentUserId: user?.id
     });
 
-    // メッセージタイプの場合のみ処理（通知のみ、メッセージ表示はChatRoomが担当）
+    // Only handle message type notifications here, ignore user_connected/user_disconnected
+    // Those are handled by OnlineStatusProvider
     if (message.type === 'message') {
       // 他のユーザーからのメッセージかチェック
       const isFromOtherUser = message.user_id !== user?.id?.toString();
