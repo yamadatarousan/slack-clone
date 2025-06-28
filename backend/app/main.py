@@ -54,8 +54,8 @@ class ConnectionManager:
         self.active_connections.append(websocket)
         self.user_connections[user_id] = websocket
         self.connection_times[user_id] = asyncio.get_event_loop().time()
-        print(f"User {user_id} connected. Total connections: {len(self.active_connections)}")
-        print(f"Currently connected users: {list(self.user_connections.keys())}")
+        logger.info(f"User {user_id} connected. Total connections: {len(self.active_connections)}")
+        logger.info(f"Currently connected users: {list(self.user_connections.keys())}")
 
     def disconnect(self, websocket: WebSocket, user_id: str):
         if websocket in self.active_connections:
@@ -64,7 +64,7 @@ class ConnectionManager:
             del self.user_connections[user_id]
         if user_id in self.connection_times:
             del self.connection_times[user_id]
-        print(f"User {user_id} disconnected. Total connections: {len(self.active_connections)}")
+        logger.info(f"User {user_id} disconnected. Total connections: {len(self.active_connections)}")
 
     async def send_personal_message(self, message: str, user_id: str):
         if user_id in self.user_connections:
@@ -72,21 +72,21 @@ class ConnectionManager:
             await websocket.send_text(message)
 
     async def broadcast(self, message: str):
-        print(f"📡 Broadcasting to {len(self.active_connections)} connections: {message}")
-        print(f"📡 Active user IDs: {list(self.user_connections.keys())}")
+        logger.info(f"📡 Broadcasting to {len(self.active_connections)} connections: {message}")
+        logger.info(f"📡 Active user IDs: {list(self.user_connections.keys())}")
         success_count = 0
         for connection in self.active_connections:
             try:
                 await connection.send_text(message)
                 success_count += 1
             except Exception as e:
-                print(f"❌ Failed to send message to connection: {e}")
-        print(f"📡 Successfully sent to {success_count}/{len(self.active_connections)} connections")
+                logger.error(f"❌ Failed to send message to connection: {e}")
+        logger.info(f"📡 Successfully sent to {success_count}/{len(self.active_connections)} connections")
 
     async def broadcast_to_channel(self, message: str, channel_id: str):
         # TODO: 本来はチャンネルメンバーのみに送信すべきだが、
         # 現在は簡単化のため全ユーザーに送信
-        print(f"📡 Broadcasting to channel {channel_id}: {message}")
+        logger.info(f"📡 Broadcasting to channel {channel_id}: {message}")
         await self.broadcast(message)
 
 manager = ConnectionManager()
@@ -118,7 +118,7 @@ async def cleanup_stale_connections():
                 manager.disconnect(websocket, user_id)
                 
                 # クリーンアップ：古い接続を削除（オンライン状態は /online-users APIで管理）
-                print(f"🧹 Cleanup: Removed stale connection for user {user_id}")
+                logger.info(f"🧹 Cleanup: Removed stale connection for user {user_id}")
 
 # クリーンアップタスクは後で開始する
 cleanup_task = None
@@ -204,7 +204,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
         display_name = user.display_name if user and user.display_name else None
         
         # WebSocketは主にチャット機能に使用、オンライン状態は /online-users APIで管理
-        print(f"🟢 User {user_id} ({user_name}) connected to WebSocket for chat")
+        logger.info(f"🟢 User {user_id} ({user_name}) connected to WebSocket for chat")
         
         # Start ping task
         ping_task = asyncio.create_task(send_ping())
@@ -243,7 +243,8 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
                     "sender_name": sender_name,
                     "timestamp": asyncio.get_event_loop().time()
                 }
-                print(f"📨 Sending message from user {user_id} ({sender_name}) to channel {message_data.get('channel_id', 'general')}: {message_data['content']}")
+                logger.info(f"📨 Sending message from user {user_id} ({sender_name}) to channel {message_data.get('channel_id', 'general')}: {message_data['content']}")
+                logger.info(f"📡 About to broadcast message: {json.dumps(broadcast_message)}")
                 await manager.broadcast_to_channel(
                     json.dumps(broadcast_message),
                     message_data.get("channel_id", "general")

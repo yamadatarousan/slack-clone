@@ -73,7 +73,20 @@ export function GlobalWebSocketProvider({ children }: GlobalWebSocketProviderPro
   }, [user]);
 
   const connectGlobalWebSocket = async () => {
-    if (!user || isConnected.current) return;
+    console.log('🔍 connectGlobalWebSocket called:', {
+      hasUser: !!user,
+      userId: user?.id,
+      isConnectedCurrent: isConnected.current,
+      websocketServiceConnected: websocketService.isConnected()
+    });
+    
+    if (!user || isConnected.current) {
+      console.log('🚫 Early return from connectGlobalWebSocket:', {
+        noUser: !user,
+        alreadyConnected: isConnected.current
+      });
+      return;
+    }
 
     try {
       console.log('🌐 Connecting global WebSocket for user:', user.id, user.username);
