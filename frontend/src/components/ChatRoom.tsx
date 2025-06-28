@@ -51,6 +51,11 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
     loadMessages();
     loadChannelUsers();
     
+    // Scroll to bottom when switching channels
+    setTimeout(() => {
+      scrollToBottom(false); // Instant scroll for channel switching
+    }, 100);
+    
     // デバッグ: 現在のユーザーとチャンネル情報をログ出力
     console.log('🏠 ChatRoom loaded:', {
       channelId: channel.id,
@@ -113,7 +118,19 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
   // }, [user]);
 
   useEffect(() => {
-    scrollToBottom();
+    // Only auto-scroll if user was already at the bottom, or if it's their own message
+    const messagesContainer = messagesEndRef.current?.parentElement;
+    if (messagesContainer) {
+      const { scrollTop, scrollHeight, clientHeight } = messagesContainer;
+      const isAtBottom = scrollHeight - scrollTop - clientHeight < 50; // 50px threshold
+      
+      // Always scroll for user's own messages, otherwise only if already at bottom
+      if (isAtBottom) {
+        requestAnimationFrame(() => {
+          scrollToBottom(true);
+        });
+      }
+    }
   }, [messages]);
 
   const connectWebSocket = async () => {
@@ -351,10 +368,10 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
       // Always reload messages after successful send to ensure display
       await loadMessages();
       
-      // Scroll to bottom to show new message
-      setTimeout(() => {
-        scrollToBottom();
-      }, 100);
+      // Scroll to bottom immediately and smoothly to show new message
+      requestAnimationFrame(() => {
+        scrollToBottom(true);
+      });
 
       // Also send via WebSocket for real-time to other users
       try {
@@ -385,8 +402,29 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
     }
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (smooth: boolean = true) => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ 
+        behavior: smooth ? 'smooth' : 'auto',
+        block: 'end',
+        inline: 'nearest'
+      });
+    }
+  };
+
+  const handleInputResize = () => {
+    // When the input field expands, maintain scroll position at bottom if user was already there
+    const messagesContainer = messagesEndRef.current?.parentElement;
+    if (messagesContainer) {
+      const { scrollTop, scrollHeight, clientHeight } = messagesContainer;
+      const isAtBottom = scrollHeight - scrollTop - clientHeight < 100; // Increased threshold for input resize
+      
+      if (isAtBottom) {
+        requestAnimationFrame(() => {
+          scrollToBottom(false); // Instant scroll to maintain bottom position
+        });
+      }
+    }
   };
 
   return (
@@ -442,6 +480,7 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
           onSendMessage={handleSendMessage} 
           onTyping={handleTyping}
           channelUsers={channelUsers}
+          onInputResize={handleInputResize}
         />
       </div>
     </div>

@@ -14,9 +14,10 @@ interface MessageInputProps {
   placeholder?: string;
   onTyping?: (isTyping: boolean) => void;
   channelUsers?: User[];
+  onInputResize?: () => void;
 }
 
-export default function MessageInput({ onSendMessage, placeholder = "メッセージを入力...", onTyping, channelUsers = [] }: MessageInputProps) {
+export default function MessageInput({ onSendMessage, placeholder = "メッセージを入力...", onTyping, channelUsers = [], onInputResize }: MessageInputProps) {
   const [message, setMessage] = useState('');
   const [showFileUpload, setShowFileUpload] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -252,8 +253,17 @@ export default function MessageInput({ onSendMessage, placeholder = "メッセ�
             }}
             onInput={(e) => {
               const target = e.target as HTMLTextAreaElement;
+              const prevHeight = target.offsetHeight;
               target.style.height = 'auto';
-              target.style.height = `${Math.min(target.scrollHeight, 150)}px`;
+              const newHeight = Math.min(target.scrollHeight, 150);
+              target.style.height = `${newHeight}px`;
+              
+              // Trigger scroll adjustment if height changed
+              if (newHeight !== prevHeight && onInputResize) {
+                requestAnimationFrame(() => {
+                  onInputResize();
+                });
+              }
             }}
           />
         </div>
