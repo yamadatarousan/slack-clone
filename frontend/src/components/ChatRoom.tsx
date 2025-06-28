@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { Channel, Message } from '../types';
 import { apiService } from '../services/api';
 import { websocketService } from '../services/websocket';
@@ -61,10 +61,10 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
     });
   }, [channel.id]);
 
-  // 初期ロード時に最下部にスクロール（Geminiの提案）
-  useEffect(() => {
+  // 初期ロード時に最下部にスクロール（useLayoutEffect でブラウザ描画前に実行）
+  useLayoutEffect(() => {
     if (messages.length > 0) {
-      // 初期表示時は即座にスクロール（smooth: false）
+      // ブラウザ描画前にスクロール位置を調整（ユーザーには見えない）
       scrollToBottom(false);
     }
   }, [messages.length > 0 ? messages[0]?.id : null]); // 最初のメッセージロード時のみ実行
