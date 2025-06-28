@@ -32,6 +32,44 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
+  // ページ離脱時にオンライン状態をfalseに設定
+  useEffect(() => {
+    if (!user) return;
+
+    const handleBeforeUnload = () => {
+      // beforeunloadでAPIを呼ぶのは不確実なので、sendBeaconを使用
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          navigator.sendBeacon(
+            'http://localhost:8000/auth/logout',
+            new Blob([''], { type: 'application/json' })
+          );
+        }
+      } catch (error) {
+        console.warn('Failed to update online status on page unload:', error);
+      }
+    };
+
+    const handleVisibilityChange = async () => {
+      if (document.visibilityState === 'hidden') {
+        try {
+          await apiService.logout();
+        } catch (error) {
+          console.warn('Failed to update online status on visibility change:', error);
+        }
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [user]);
+
   const loadUser = async () => {
     try {
       console.log('Loading user...');
