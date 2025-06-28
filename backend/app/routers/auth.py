@@ -155,6 +155,11 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    
+    # Set user as online when logging in
+    user.is_online = True
+    db.commit()
+    
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
@@ -184,3 +189,15 @@ def update_user_status(
     db.commit()
     
     return {"message": "Status updated successfully"}
+
+
+@router.post("/logout")
+def logout(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Set user as offline when logging out
+    current_user.is_online = False
+    db.commit()
+    
+    return {"message": "Logged out successfully"}

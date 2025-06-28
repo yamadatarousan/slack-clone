@@ -5,6 +5,7 @@ import { CreateChannelModal } from './CreateChannelModal';
 import { ChannelBrowser } from './ChannelBrowser';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../contexts/ThemeContext';
+import { useOnlineStatus } from '../contexts/OnlineStatusContext';
 
 interface SidebarProps {
   selectedChannelId?: number;
@@ -14,6 +15,7 @@ interface SidebarProps {
 export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarProps) {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { onlineCount, isUserOnline } = useOnlineStatus();
   const [channels, setChannels] = useState<Channel[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -90,7 +92,13 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
       {/* Workspace header */}
       <div className="p-4 border-b border-gray-700 dark:border-gray-600">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-white">Slack Clone</h2>
+          <div>
+            <h2 className="text-lg font-semibold text-white">Slack Clone</h2>
+            <div className="flex items-center space-x-1 text-sm text-gray-300">
+              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+              <span>{onlineCount} online</span>
+            </div>
+          </div>
           <button
             onClick={toggleTheme}
             className="p-1 rounded text-gray-300 hover:text-white transition-colors"
