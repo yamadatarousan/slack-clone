@@ -14,18 +14,29 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>('light');
-
-  useEffect(() => {
+  const [theme, setTheme] = useState<Theme>(() => {
+    // Initialize theme from localStorage or system preference
     const savedTheme = localStorage.getItem('theme') as Theme;
     if (savedTheme) {
-      setTheme(savedTheme);
+      return savedTheme;
     } else {
       // Check system preference
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
+      return prefersDark ? 'dark' : 'light';
     }
-  }, []);
+  });
+
+  // Remove the initialization useEffect since we're doing it in useState
+  // useEffect(() => {
+  //   const savedTheme = localStorage.getItem('theme') as Theme;
+  //   if (savedTheme) {
+  //     setTheme(savedTheme);
+  //   } else {
+  //     // Check system preference
+  //     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  //     setTheme(prefersDark ? 'dark' : 'light');
+  //   }
+  // }, []);
 
   useEffect(() => {
     localStorage.setItem('theme', theme);

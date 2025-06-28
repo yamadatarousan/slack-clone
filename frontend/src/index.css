@@ -7,6 +7,8 @@
   --color-primary-700: #1d4ed8;
 }
 
+@variant dark (.dark &);
+
 @layer base {
   * {
     @apply box-border;
@@ -24,6 +26,7 @@
     @apply h-full;
   }
 }
+
 
 @layer utilities {
   .btn {

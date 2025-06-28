@@ -24,7 +24,7 @@ export default function LoginForm({ onToggleMode }: LoginFormProps) {
 
   return (
     <div className="card p-8 w-full max-w-md">
-      <h2 className="text-2xl font-bold text-center mb-6">ログイン</h2>
+      <h2 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">ログイン</h2>
       
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-md p-3 mb-4">
@@ -34,7 +34,7 @@ export default function LoginForm({ onToggleMode }: LoginFormProps) {
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             ユーザー名 または メールアドレス
           </label>
           <input
@@ -49,7 +49,7 @@ export default function LoginForm({ onToggleMode }: LoginFormProps) {
         </div>
         
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             パスワード
           </label>
           <input
@@ -73,11 +73,11 @@ export default function LoginForm({ onToggleMode }: LoginFormProps) {
       </form>
       
       <div className="mt-6 text-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           アカウントをお持ちでない方は{' '}
           <button
             onClick={onToggleMode}
-            className="text-primary-600 hover:text-primary-700 font-medium"
+            className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
           >
             こちらから登録
           </button>

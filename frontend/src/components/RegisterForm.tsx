@@ -26,7 +26,7 @@ export default function RegisterForm({ onToggleMode }: RegisterFormProps) {
 
   return (
     <div className="card p-8 w-full max-w-md">
-      <h2 className="text-2xl font-bold text-center mb-6">アカウント登録</h2>
+      <h2 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">アカウント登録</h2>
       
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-md p-3 mb-4">
@@ -36,7 +36,7 @@ export default function RegisterForm({ onToggleMode }: RegisterFormProps) {
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             ユーザー名 *
           </label>
           <input
@@ -51,7 +51,7 @@ export default function RegisterForm({ onToggleMode }: RegisterFormProps) {
         </div>
         
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             メールアドレス *
           </label>
           <input
@@ -66,7 +66,7 @@ export default function RegisterForm({ onToggleMode }: RegisterFormProps) {
         </div>
         
         <div>
-          <label htmlFor="display_name" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="display_name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             表示名
           </label>
           <input
@@ -80,7 +80,7 @@ export default function RegisterForm({ onToggleMode }: RegisterFormProps) {
         </div>
         
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             パスワード *
           </label>
           <input
@@ -104,11 +104,11 @@ export default function RegisterForm({ onToggleMode }: RegisterFormProps) {
       </form>
       
       <div className="mt-6 text-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           既にアカウントをお持ちの方は{' '}
           <button
             onClick={onToggleMode}
-            className="text-primary-600 hover:text-primary-700 font-medium"
+            className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
           >
             こちらからログイン
           </button>
