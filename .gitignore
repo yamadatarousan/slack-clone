@@ -164,3 +164,6 @@ server.log
 # Temporary HTML test files
 test_*.html
 clear_storage.html
+
+# Claude Code settings
+.claude/
