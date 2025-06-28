@@ -46,6 +46,7 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
   const [channelUsers, setChannelUsers] = useState<any[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const processedMessageIds = useRef<Set<string>>(new Set());
+  const isUserSending = useRef<boolean>(false);
 
   useEffect(() => {
     loadMessages();
@@ -113,7 +114,23 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
   // }, [user]);
 
   useEffect(() => {
-    scrollToBottom();
+    // Only auto-scroll if user is sending a message or already at bottom
+    if (isUserSending.current) {
+      // User just sent a message, always scroll to bottom
+      scrollToBottom();
+      isUserSending.current = false;
+    } else {
+      // Check if user was already at bottom before scrolling
+      const messagesContainer = messagesEndRef.current?.parentElement;
+      if (messagesContainer) {
+        const { scrollTop, scrollHeight, clientHeight } = messagesContainer;
+        const isAtBottom = scrollHeight - scrollTop - clientHeight < 100;
+        
+        if (isAtBottom) {
+          scrollToBottom();
+        }
+      }
+    }
   }, [messages]);
 
   const connectWebSocket = async () => {
@@ -158,28 +175,29 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
         });
         
         if (message.type === 'message' && message.channel_id === channel.id.toString()) {
-          // Only reload if the message is from another user to avoid duplicate reloads
+          // Create unique message ID to prevent duplicate processing
+          const messageId = `${message.user_id}-${message.channel_id}-${message.timestamp}-${message.content}`;
+          
+          // Check if we've already processed this message
+          if (processedMessageIds.current.has(messageId)) {
+            console.log('🔄 Skipping duplicate message:', messageId);
+            return;
+          }
+          
+          // Mark message as processed
+          processedMessageIds.current.add(messageId);
+          
+          // Clean up old message IDs (keep only last 100)
+          if (processedMessageIds.current.size > 100) {
+            const idsArray = Array.from(processedMessageIds.current);
+            processedMessageIds.current = new Set(idsArray.slice(-50));
+          }
+          
+          // Reload messages without loading indicator for WebSocket updates
+          loadMessages(false);
+          
+          // Only show notifications for messages from other users
           if (message.user_id !== user.id.toString()) {
-            // Create unique message ID to prevent duplicate processing
-            const messageId = `${message.user_id}-${message.channel_id}-${message.timestamp}-${message.content}`;
-            
-            // Check if we've already processed this message
-            if (processedMessageIds.current.has(messageId)) {
-              console.log('🔄 Skipping duplicate message:', messageId);
-              return;
-            }
-            
-            // Mark message as processed
-            processedMessageIds.current.add(messageId);
-            
-            // Clean up old message IDs (keep only last 100)
-            if (processedMessageIds.current.size > 100) {
-              const idsArray = Array.from(processedMessageIds.current);
-              processedMessageIds.current = new Set(idsArray.slice(-50));
-            }
-            
-            loadMessages();
-            
             // Show notification for new messages
             const isWindowFocused = document.hasFocus();
             const senderName = message.sender_name || `ユーザー${message.user_id}`;
@@ -304,9 +322,11 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
     }
   };
 
-  const loadMessages = async () => {
+  const loadMessages = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) {
+        setLoading(true);
+      }
       console.log(`Loading messages for channel ${channel.id}`);
       const messagesData = await apiService.getChannelMessages(channel.id);
       console.log(`Loaded ${messagesData.length} messages`);
@@ -314,7 +334,9 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
     } catch (error) {
       console.error('Failed to load messages:', error);
     } finally {
-      setLoading(false);
+      if (showLoading) {
+        setLoading(false);
+      }
     }
   };
 
@@ -341,6 +363,10 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
 
     try {
       console.log(`Sending message: "${content}" to channel ${channel.id}`);
+      
+      // Mark that user is sending a message
+      isUserSending.current = true;
+      
       // Send via REST API for persistence
       const sentMessage = await apiService.sendMessage({
         content,
@@ -348,13 +374,8 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
       });
       console.log('Message sent successfully:', sentMessage);
 
-      // Always reload messages after successful send to ensure display
-      await loadMessages();
-      
-      // Scroll to bottom to show new message
-      setTimeout(() => {
-        scrollToBottom();
-      }, 100);
+      // Reload messages without showing loading indicator to prevent scroll
+      await loadMessages(false);
 
       // Also send via WebSocket for real-time to other users
       try {
@@ -370,8 +391,8 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
       
     } catch (error) {
       console.error('Failed to send message:', error);
-      // On error, also try to reload messages
-      await loadMessages();
+      // On error, also try to reload messages without loading indicator
+      await loadMessages(false);
     }
   };
 
