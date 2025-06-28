@@ -1,4 +1,5 @@
 import { WebSocketMessage } from '../types';
+import { debugManager } from '../utils/debug';
 
 export class WebSocketService {
   private ws: WebSocket | null = null;
@@ -39,24 +40,27 @@ export class WebSocketService {
         this.ws.onmessage = (event) => {
           try {
             const message: WebSocketMessage = JSON.parse(event.data);
-            console.log('🚨 RAW WebSocket message received:', {
+            
+            // デバッグログに記録（常時コンソール出力はしない）
+            debugManager.addLog('websocket_message', {
               rawData: event.data,
               parsedMessage: message,
               handlersCount: this.messageHandlers.length,
-              timestamp: new Date().toISOString(),
-              messageType: message.type,
-              isUserConnectedMessage: message.type === 'user_connected'
+              messageType: message.type
             });
             
             // Create unique message ID for deduplication
             const messageId = `${message.type}-${message.user_id}-${message.channel_id || 'none'}-${message.timestamp || Date.now()}-${JSON.stringify(message).slice(0, 50)}`;
             
-            console.log('🔍 WebSocket: Generated message ID:', messageId);
-            console.log('🔍 WebSocket: Already processed IDs:', Array.from(this.processedMessages));
+            // デバッグログに記録
+            debugManager.addLog('websocket_processing', {
+              messageId,
+              processedCount: this.processedMessages.size
+            });
             
             // Check for duplicate messages
             if (this.processedMessages.has(messageId)) {
-              console.log('🔄 WebSocket: Skipping duplicate message:', messageId);
+              debugManager.addLog('websocket_duplicate', { messageId });
               return;
             }
             
@@ -69,21 +73,18 @@ export class WebSocketService {
               this.processedMessages = new Set(idsArray.slice(-25));
             }
             
-            // 🔥 強制的にハンドラーを呼び出す（デバッグ用）
+            // ハンドラーを呼び出し
             if (this.messageHandlers.length > 0) {
-              console.log('🔥 Calling message handlers for message type:', message.type);
-              console.log('🔥 Total handlers:', this.messageHandlers.length);
               this.messageHandlers.forEach((handler, index) => {
-                console.log(`🔥 Calling handler ${index} for message:`, message);
                 try {
                   handler(message);
-                  console.log(`✅ Handler ${index} completed`);
+                  debugManager.addLog('handler_success', { index, messageType: message.type });
                 } catch (error) {
-                  console.error(`❌ Handler ${index} failed:`, error);
+                  debugManager.addLog('handler_error', { index, error: error.message, messageType: message.type });
                 }
               });
             } else {
-              console.warn('⚠️ No message handlers registered!');
+              debugManager.addLog('no_handlers', { messageType: message.type });
             }
           } catch (error) {
             console.error('Failed to parse WebSocket message:', error);

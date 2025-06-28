@@ -7,6 +7,10 @@ import { ThemeProvider } from './contexts/ThemeContext.tsx'
 import { NotificationProvider } from './contexts/NotificationContext.tsx'
 import { GlobalWebSocketProvider } from './contexts/GlobalWebSocketContext.tsx'
 import { OnlineStatusProvider } from './contexts/OnlineStatusContext.tsx'
+import { debugManager } from './utils/debug'
+
+// デバッグ機能をグローバルに公開
+debugManager.exposeToWindow()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
