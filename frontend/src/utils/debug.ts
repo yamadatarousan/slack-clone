@@ -132,6 +132,11 @@ export class DebugManager {
     }
   }
 
+  // 最近のログを取得
+  getRecentLogs(): any[] {
+    return this.recentLogs;
+  }
+
   // グローバルに公開
   exposeToWindow(): void {
     (window as any).debugSlackClone = {

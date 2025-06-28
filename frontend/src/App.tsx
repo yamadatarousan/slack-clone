@@ -4,6 +4,7 @@ import { useNotifications } from './contexts/NotificationContext';
 import AuthPage from './pages/AuthPage';
 import ChatPage from './pages/ChatPage';
 import NotificationToast from './components/NotificationToast';
+import DebugPanel from './components/DebugPanel';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -70,6 +71,7 @@ function AppRoutes() {
         <Route path="/" element={<Navigate to="/chat" replace />} />
       </Routes>
       <NotificationToast />
+      <DebugPanel />
     </Router>
   );
 }
