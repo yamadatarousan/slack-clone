@@ -26,8 +26,14 @@ class ApiService {
     // Handle auth errors
     this.api.interceptors.response.use(
       (response) => response,
-      (error) => {
+      async (error) => {
         if (error.response?.status === 401) {
+          // セッション切れ時にログアウトAPIを呼び出してis_online=falseに設定
+          try {
+            await this.logout();
+          } catch (logoutError) {
+            console.warn('Logout API failed during 401 handling:', logoutError);
+          }
           localStorage.removeItem('token');
           window.location.href = '/auth';
         }

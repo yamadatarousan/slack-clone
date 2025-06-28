@@ -61,6 +61,14 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
     });
   }, [channel.id]);
 
+  // 初期ロード時に最下部にスクロール（Geminiの提案）
+  useEffect(() => {
+    if (messages.length > 0) {
+      // 初期表示時は即座にスクロール（smooth: false）
+      scrollToBottom(false);
+    }
+  }, [messages.length > 0 ? messages[0]?.id : null]); // 最初のメッセージロード時のみ実行
+
   useEffect(() => {
     // Only register message handler for this channel, don't manage connection
     if (user && websocketService.isConnected()) {
@@ -517,8 +525,10 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
     }
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (smooth: boolean = true) => {
+    messagesEndRef.current?.scrollIntoView({ 
+      behavior: smooth ? 'smooth' : 'auto' 
+    });
   };
 
   return (
