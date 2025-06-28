@@ -112,9 +112,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
+  const logout = async () => {
+    try {
+      // Call logout API to set is_online = false
+      await apiService.logout();
+    } catch (error) {
+      console.error('Logout API error:', error);
+      // Continue with logout even if API fails
+    } finally {
+      localStorage.removeItem('token');
+      setUser(null);
+    }
   };
 
   const contextValue: AuthContextType = {

@@ -15,7 +15,7 @@ interface SidebarProps {
 export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarProps) {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { onlineUsers, getOnlineCount, isUserOnline } = useOnlineStatus();
+  const { onlineCount, isUserOnline } = useOnlineStatus();
   const [channels, setChannels] = useState<Channel[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -96,10 +96,7 @@ export default function Sidebar({ selectedChannelId, onChannelSelect }: SidebarP
             <h2 className="text-lg font-semibold text-white">Slack Clone</h2>
             <div className="flex items-center space-x-1 text-sm text-gray-300">
               <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span>{getOnlineCount()} online</span>
-              <span className="text-xs text-gray-400">
-                ({Array.from(onlineUsers.values()).filter(u => u.is_online).map(u => u.username).join(', ')})
-              </span>
+              <span>{onlineCount} online</span>
             </div>
           </div>
           <button

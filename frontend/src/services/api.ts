@@ -175,6 +175,12 @@ class ApiService {
     const response: AxiosResponse<{ online_users: any[], count: number }> = await this.api.get('/online-users');
     return response.data;
   }
+
+  // ログアウト
+  async logout(): Promise<{ message: string }> {
+    const response: AxiosResponse<{ message: string }> = await this.api.post('/auth/logout');
+    return response.data;
+  }
 }
 
 export const apiService = new ApiService();
