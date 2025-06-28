@@ -117,24 +117,8 @@ async def cleanup_stale_connections():
             if websocket:
                 manager.disconnect(websocket, user_id)
                 
-                # 切断通知をブロードキャスト
-                db = next(get_db())
-                try:
-                    user = db.query(User).filter(User.id == int(user_id)).first()
-                    user_name = user.username if user else f"User{user_id}"
-                    display_name = user.display_name if user and user.display_name else None
-                    
-                    disconnect_message = json.dumps({
-                        "type": "user_disconnected",
-                        "user_id": user_id,
-                        "username": user_name,
-                        "display_name": display_name,
-                        "timestamp": current_time
-                    })
-                    print(f"🧹 Cleanup: Broadcasting disconnect for stale user {user_id}")
-                    await manager.broadcast(disconnect_message)
-                finally:
-                    db.close()
+                # クリーンアップ：古い接続を削除（オンライン状態は /online-users APIで管理）
+                print(f"🧹 Cleanup: Removed stale connection for user {user_id}")
 
 # クリーンアップタスクは後で開始する
 cleanup_task = None
@@ -158,22 +142,32 @@ async def root():
 async def health_check():
     return {"status": "healthy"}
 
-@app.get("/online-users")
-async def get_online_users():
-    """現在接続中のユーザーリストを返す"""
+@app.post("/reset-online-status")
+async def reset_online_status():
+    """全ユーザーのオンライン状態をリセット（デバッグ用）"""
     db = next(get_db())
     try:
-        online_user_ids = list(manager.user_connections.keys())
+        db.query(User).update({"is_online": False})
+        db.commit()
+        return {"message": "All users set to offline"}
+    finally:
+        db.close()
+
+@app.get("/online-users")
+async def get_online_users():
+    """現在ログイン中のユーザーリストを返す（is_online=Trueのユーザー）"""
+    db = next(get_db())
+    try:
+        # データベースのis_onlineフィールドから直接取得
+        online_users = db.query(User).filter(User.is_online == True).all()
         users = []
-        for user_id in online_user_ids:
-            user = db.query(User).filter(User.id == int(user_id)).first()
-            if user:
-                users.append({
-                    "id": user.id,
-                    "username": user.username,
-                    "display_name": user.display_name,
-                    "is_online": True
-                })
+        for user in online_users:
+            users.append({
+                "id": user.id,
+                "username": user.username,
+                "display_name": user.display_name,
+                "is_online": True
+            })
         return {"online_users": users, "count": len(users)}
     finally:
         db.close()
@@ -200,19 +194,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
                 print(f"🔴 Ping failed for user {user_id}: {e}")
                 # Force disconnect handling
                 manager.disconnect(websocket, user_id)
-                user = db.query(User).filter(User.id == int(user_id)).first()
-                user_name = user.username if user else f"User{user_id}"
-                display_name = user.display_name if user and user.display_name else None
-                
-                disconnect_message = json.dumps({
-                    "type": "user_disconnected",
-                    "user_id": user_id,
-                    "username": user_name,
-                    "display_name": display_name,
-                    "timestamp": asyncio.get_event_loop().time()
-                })
-                print(f"🔴 Broadcasting user_disconnected event after ping failure: {disconnect_message}")
-                await manager.broadcast(disconnect_message)
+                print(f"🔴 Connection lost for user {user_id} after ping failure")
                 break
     
     try:
@@ -221,29 +203,8 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
         user_name = user.username if user else f"User{user_id}"
         display_name = user.display_name if user and user.display_name else None
         
-        # 既存のオンラインユーザーリストを新規ユーザーに送信
-        for existing_user_id in manager.user_connections.keys():
-            if existing_user_id != user_id:  # 自分以外のユーザー
-                existing_user = db.query(User).filter(User.id == int(existing_user_id)).first()
-                if existing_user:
-                    await websocket.send_text(json.dumps({
-                        "type": "user_connected",
-                        "user_id": existing_user_id,
-                        "username": existing_user.username,
-                        "display_name": existing_user.display_name,
-                        "timestamp": asyncio.get_event_loop().time()
-                    }))
-        
-        # 接続通知を他のユーザーに送信（自分には送らない）
-        user_connected_message = json.dumps({
-            "type": "user_connected",
-            "user_id": user_id,
-            "username": user_name,
-            "display_name": display_name,
-            "timestamp": asyncio.get_event_loop().time()
-        })
-        print(f"🟢 Broadcasting user_connected event: {user_connected_message}")
-        await manager.broadcast(user_connected_message)
+        # WebSocketは主にチャット機能に使用、オンライン状態は /online-users APIで管理
+        print(f"🟢 User {user_id} ({user_name}) connected to WebSocket for chat")
         
         # Start ping task
         ping_task = asyncio.create_task(send_ping())
@@ -316,16 +277,8 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
             user_name = user.username if user else f"User{user_id}"
             display_name = user.display_name if user and user.display_name else None
         
-        # 切断通知を他のユーザーに送信
-        disconnect_message = json.dumps({
-            "type": "user_disconnected",
-            "user_id": user_id,
-            "username": user_name,
-            "display_name": display_name,
-            "timestamp": asyncio.get_event_loop().time()
-        })
-        print(f"🔴 Broadcasting user_disconnected event: {disconnect_message}")
-        await manager.broadcast(disconnect_message)
+        # WebSocket切断（オンライン状態は /online-users APIで管理）
+        print(f"🔴 User {user_id} ({user_name}) disconnected from WebSocket")
     except Exception as e:
         print(f"🚨 Unexpected error in WebSocket endpoint for user {user_id}: {e}")
         manager.disconnect(websocket, user_id)
@@ -336,15 +289,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
             user_name = user.username if user else f"User{user_id}"
             display_name = user.display_name if user and user.display_name else None
         
-        disconnect_message = json.dumps({
-            "type": "user_disconnected",
-            "user_id": user_id,
-            "username": user_name,
-            "display_name": display_name,
-            "timestamp": asyncio.get_event_loop().time()
-        })
-        print(f"🔴 Broadcasting user_disconnected event after error: {disconnect_message}")
-        await manager.broadcast(disconnect_message)
+        print(f"🔴 User {user_id} ({user_name}) disconnected due to error")
     finally:
         # Cancel ping task if it exists
         if ping_task and not ping_task.done():
