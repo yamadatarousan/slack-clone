@@ -108,10 +108,12 @@ export function GlobalWebSocketProvider({ children }: GlobalWebSocketProviderPro
       currentUserId: user?.id
     });
 
-    // メッセージタイプの場合のみ処理
+    // メッセージタイプの場合のみ処理（通知のみ、メッセージ表示はChatRoomが担当）
     if (message.type === 'message') {
       // 他のユーザーからのメッセージかチェック
       const isFromOtherUser = message.user_id !== user?.id?.toString();
+      
+      console.log('🌐 GlobalWebSocketProvider: Processing message for notifications only');
       
       if (isFromOtherUser) {
         const senderName = message.sender_name || `ユーザー${message.user_id}`;

@@ -61,19 +61,17 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
     });
   }, [channel.id]);
 
-  // WebSocket接続はGlobalWebSocketProviderで管理されるため、
-  // チャンネル固有の接続は無効化
-  // useEffect(() => {
-  //   // Connect to WebSocket when component mounts
-  //   if (user) {
-  //     connectWebSocket();
-  //   }
+  useEffect(() => {
+    // Connect to WebSocket when component mounts or channel changes
+    if (user) {
+      connectWebSocket();
+    }
 
-  //   return () => {
-  //     // Cleanup WebSocket connection
-  //     websocketService.disconnect();
-  //   };
-  // }, [user]);
+    return () => {
+      // Don't disconnect here as GlobalWebSocketProvider manages connection
+      // Just clean up any local handlers
+    };
+  }, [user, channel.id]);
 
   // WebSocket接続状態の監視はGlobalWebSocketProviderで管理
   // useEffect(() => {
@@ -143,23 +141,21 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
       console.log('🔌 Attempting WebSocket connection for user:', user.id, user.username);
       console.log('🔌 WebSocket URL will be:', `ws://localhost:8000/ws/${user.id}`);
       
-      // 既存のハンドラーをクリア（重複を防ぐ）
-      websocketService.disconnect();
+      // Check if already connected
+      if (websocketService.isConnected()) {
+        console.log('✅ WebSocket already connected, registering handler');
+      } else {
+        // 既存のハンドラーをクリア（重複を防ぐ）
+        websocketService.disconnect();
+        
+        // 接続を確立
+        await websocketService.connect(user.id.toString());
+        console.log('✅ WebSocket connected successfully');
+      }
       
-      // 接続を確立
-      await websocketService.connect(user.id.toString());
-      console.log('✅ WebSocket connected successfully');
-      
-      // 接続後の状態を確認
-      setTimeout(() => {
-        console.log('📊 WebSocket state after connection:', {
-          readyState: websocketService.isConnected(),
-          wsState: (window as any).websocketService?.ws?.readyState
-        });
-      }, 1000);
-      
-      // 接続が確実に確立されてからハンドラーを登録
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Clear existing message handlers to avoid conflicts
+      console.log('🧹 Clearing existing WebSocket handlers before registering new one');
+      (websocketService as any).messageHandlers = [];
       
       // Listen for new messages
       console.log('📝 Registering WebSocket message handler for channel:', channel.id);
@@ -175,10 +171,24 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
         });
         
         if (message.type === 'message' && message.channel_id === channel.id.toString()) {
-          // Create unique message ID to prevent duplicate processing
-          const messageId = `${message.user_id}-${message.channel_id}-${message.timestamp}-${message.content}`;
+          // Debug: Log the full message structure
+          console.log('📨 Received WebSocket message:', {
+            type: message.type,
+            user_id: message.user_id,
+            channel_id: message.channel_id,
+            content: message.content,
+            timestamp: message.timestamp,
+            sender_name: message.sender_name,
+            fullMessage: message
+          });
           
-          // Check if we've already processed this message
+          // Create simpler message ID to prevent duplicate processing
+          // Use a shorter ID to reduce false positive duplicates
+          const messageId = `${message.user_id}-${message.channel_id}-${message.content.substring(0, 50)}`;
+          
+          console.log('🔍 Processing message with ID:', messageId);
+          
+          // Check if we've already processed this message (shorter time window)
           if (processedMessageIds.current.has(messageId)) {
             console.log('🔄 Skipping duplicate message:', messageId);
             return;
@@ -187,10 +197,10 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
           // Mark message as processed
           processedMessageIds.current.add(messageId);
           
-          // Clean up old message IDs (keep only last 100)
-          if (processedMessageIds.current.size > 100) {
+          // Clean up old message IDs more aggressively (keep only last 20)
+          if (processedMessageIds.current.size > 20) {
             const idsArray = Array.from(processedMessageIds.current);
-            processedMessageIds.current = new Set(idsArray.slice(-50));
+            processedMessageIds.current = new Set(idsArray.slice(-10));
           }
           
           // Reload messages without loading indicator for WebSocket updates
@@ -291,34 +301,7 @@ export default function ChatRoom({ channel }: ChatRoomProps) {
 
       return unsubscribe;
     } catch (error) {
-      console.error('🚨 CRITICAL: WebSocket connection failed:', error);
-      console.error('WebSocket connection details:', {
-        userId: user.id,
-        username: user.username,
-        channelId: channel.id,
-        wsUrl: `ws://localhost:8000/ws/${user.id}`,
-        error: error,
-        errorType: typeof error,
-        errorMessage: error?.message,
-        errorStack: error?.stack,
-        errorCode: error?.code,
-        errorReason: error?.reason
-      });
-      
-      // エラーの詳細を取得
-      let errorMessage = 'Unknown error';
-      if (error instanceof Event) {
-        errorMessage = `WebSocket connection failed (Event type: ${error.type})`;
-      } else if (error?.message) {
-        errorMessage = error.message;
-      } else {
-        errorMessage = String(error);
-      }
-      
-      // ユーザーに通知（デバッグモードでは詳細表示）
-      console.warn(`WebSocket接続エラー: ${errorMessage}`);
-      // alert を一時的に無効化して、ヘルスチェックで自動復旧を試行
-      // alert(`WebSocket接続エラー: ${errorMessage}\n\nバックエンドサーバーが起動していることを確認してください。`);
+      console.error('🚨 CRITICAL: WebSocket handler registration failed:', error);
     }
   };
 
