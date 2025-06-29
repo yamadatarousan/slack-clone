@@ -168,6 +168,32 @@ Claudeは以下を検出したら**必ず🚨アラートを出すこと**：
 上記症状を確認したら、複雑なデバッグより**サーバー再起動**を優先的に提案する。
 理由: WebSocket接続とハンドラー状態がリセットされ、正常な状態で再確立される。
 
+## 🛠️ Playwright MCPツール設定
+
+### MCPツールの追加方法
+```bash
+claude mcp add playwright npx -- -y @playwright/mcp
+```
+
+### 重要な注意事項
+- `/mcp`コマンドで「No MCP servers configured」と表示されても、実際にはMCPツールは利用可能
+- 設定確認より先に、まず実際の機能を試すこと
+- `mcp__playwright__*` 関数群が利用可能になる
+
+### 利用可能なPlaywright機能
+- `mcp__playwright__browser_navigate` - ページ遷移
+- `mcp__playwright__browser_click` - クリック操作
+- `mcp__playwright__browser_type` - テキスト入力
+- `mcp__playwright__browser_console_messages` - コンソールログ取得
+- `mcp__playwright__browser_snapshot` - ページ構造取得
+- その他多数のブラウザ操作機能
+
+### テスト用ユーザー情報
+- **Email**: admin@example.com
+- **Username**: admin
+- **Password**: password
+- **Display Name**: システム管理者
+
 ## 🔧 次のタスク
 1. Reactプロジェクト作成・セットアップ
 2. 基本UIコンポーネント実装
